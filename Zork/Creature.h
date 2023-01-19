@@ -2,11 +2,8 @@
 #include "Entity.h"
 #include "Room.h"
 
-namespace Zork
+class Creature : public Entity
 {
-	class Creature : public Entity
-	{
-	public:
-		Creature(const char* name, const char* description, Room* room);
-	};
-}
+public:
+	Creature(const char* name, const char* description, Room* room);
+};

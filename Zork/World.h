@@ -1,19 +1,17 @@
 #pragma once
-#include <vector>
+#include <iostream>
 #include <list>
+#include "Entity.h"
+#include "Player.h"
 
-class Entity;
-class Player;
-class Room;
 
-namespace Zork
+class World
 {
-	class World
-	{
-	public:
-		World();
-	private:
-		std::vector<Entity*> entities;
-		Player* player;
-	};
-}
+public:
+	World();
+	~World();
+
+private:
+	Player* player;
+	std::list<Entity*> entities;
+};

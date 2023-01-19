@@ -1,11 +1,9 @@
 #pragma once
-namespace Zork
+
+enum Direction
 {
-	enum Direction
-	{
-		NORTH,
-		EAST,
-		SOUTH,
-		WEST
-	};
-}
+	NORTH,
+	EAST,
+	SOUTH,
+	WEST
+};
