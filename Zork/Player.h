@@ -5,6 +5,7 @@ namespace Zork
 {
 	class Player : public Creature
 	{
-		Player(const char* name, const char* description);
+	public:
+		Player(const char* name, const char* description, Room* room);
 	};
 }

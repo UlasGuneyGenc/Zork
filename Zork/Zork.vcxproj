@@ -144,15 +144,19 @@
     <ClCompile Include="Exit.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Npc.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Creature.h" />
+    <ClInclude Include="Direction.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="EntityType.h" />
     <ClInclude Include="Exit.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="Npc.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="World.h" />
