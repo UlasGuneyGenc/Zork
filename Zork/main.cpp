@@ -3,7 +3,6 @@
 
 int main()
 {
-    std::cout << "Hello Zork!\n";
 
     //Initiliaze world
     World world;

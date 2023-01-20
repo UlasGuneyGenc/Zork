@@ -7,6 +7,12 @@
 
 World::World()
 {
+	//Game beginning and getting character name
+	std::cout << "You slowly open your eyes and find yourself lying on a cold, stone floor." << std::endl;
+	std::cout << "You appear to be in an abandoned church, with boarded-up windows and overturned pews." << std::endl;
+	std::cout << "You can't remember how you got here or why you're here. But you realize that you have to find your way out." << std::endl;
+	
+
 	// Create rooms
 	Room* abandonedChurch = new Room("Abandoned Church", "Abandoned Church is a decaying, boarded-up structure. Pews overturned and altar is covered in dust and cobwebs. Scent of decay and neglect lingers in the air.");
 	Room* garden = new Room("Garden", "The Garden is overgrown and unkempt, with wilted flowers and tall weeds. Neglected, with a sense of ethereal beauty.");
@@ -30,6 +36,8 @@ World::World()
 	entities.push_back(exitGardenToChurch);
 	entities.push_back(exitGardenToGraveyard);
 	entities.push_back(exitGraveyardToGarden);
+
+	player->GetParent()->Look();
 
 }
 
