@@ -21,6 +21,7 @@ World::World()
 
 	// Create player
 	Player* player = new Player("Hero", "Mighty hero!", abandonedChurch);
+	this->player = player;
 
 	// Create exits
 	Exit* exitChurchToGarden = new Exit("Broken door", "The exit from the church leads to a small, overgrown garden.", Direction::NORTH, abandonedChurch, garden);
@@ -36,7 +37,6 @@ World::World()
 	entities.push_back(exitGardenToChurch);
 	entities.push_back(exitGardenToGraveyard);
 	entities.push_back(exitGraveyardToGarden);
-
 	player->GetParent()->Look();
 
 }
@@ -46,5 +46,35 @@ World::~World()
 	while (!entities.empty())
 		delete entities.front(), entities.pop_front();
 	entities.clear();
+}
+
+void World::HandleInput(const std::vector<std::string>& words)
+{
+	switch (words.size()) {
+	case 0:
+		std::cout << "You did not type anything!" << std::endl;
+		break;
+	case 1:
+		if (words[0] == "exit" || words[0] == "quit" || words[0] == "q") {
+			gameOver = true;
+		}
+		else
+			std::cout << "I did not understand you!" << std::endl;
+		break;
+	case 2:
+		//TO DO
+		break;
+	case 3:
+		//TO DO
+		break;
+	default:
+		std::cout << "I did not understand you!" << std::endl;
+		break;
+	}
+}
+
+bool World::IsGameOver() const
+{
+	return gameOver;
 }
 

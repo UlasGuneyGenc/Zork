@@ -1,5 +1,7 @@
 #include <iostream>
 #include "World.h"
+#include <vector>
+#include "Helpers.h"
 
 int main()
 {
@@ -9,17 +11,12 @@ int main()
 	std::string player_input;
 
 	//loop to enter string
-	while (1)
+	while (!world.IsGameOver())
 	{
 		getline(std::cin, player_input);
 
-		if (player_input == "exit" || player_input == "quit" || player_input == "q")
-			break;
-		else
-			//TO DO
-			std::cout << "I did not understand you!\n";
-			continue;
-
+		std::vector<std::string> verbs = GetVerbs(toLowerCase(player_input));
+		world.HandleInput(verbs);
 	}
 
 	std::cout << "\nThank you for playing, Bye!\n";
