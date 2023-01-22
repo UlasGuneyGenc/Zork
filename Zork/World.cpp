@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Exit.h"
 #include <list>
+#include "Item.h"
 
 World::World()
 {
@@ -28,7 +29,15 @@ World::World()
 	Exit* exitGardenToChurch = new Exit("Broken door", "The exit from the garden leads back to the abandoned church.", Direction::SOUTH, garden, abandonedChurch);
 	Exit* exitGardenToGraveyard = new Exit("Muddy broken wall", "The exit from the garden leads to a neglected graveyard.", Direction::WEST, garden, graveyard);
 	Exit* exitGraveyardToGarden = new Exit("Muddy broken wall", "The exit from the graveyard leads to a small, overgrown garden.", Direction::EAST, graveyard, garden);
-	
+
+	//Create storage items
+	Item* smallChest = new Item("Chest", "Small wooden chest is worn and weathered, crafted from rough-hewn planks of wood. Iron hinges and lock rusted with age, giving off a sense of mystery.", abandonedChurch, ItemType::STORAGE);
+
+
+	//Create items in the storages
+	Item* rustyKey = new Item("Key", "Rusty Iron key, small and worn, covered in rust, teeth still sharp.",smallChest,ItemType::KEY);
+
+
 	entities.push_back(abandonedChurch);
 	entities.push_back(garden);
 	entities.push_back(graveyard);
@@ -58,12 +67,19 @@ void World::HandleInput(const std::vector<std::string>& arguments)
 		if (arguments[0] == "exit" || arguments[0] == "quit" || arguments[0] == "q") {
 			gameOver = true;
 		}
+		else if (arguments[0] == "look" || arguments[0] == "info") {
+			player->GetParent()->Look();
+		}
 		else
 			std::cout << "I did not understand you!" << std::endl;
 		break;
 	case 2:
 		if (arguments[0] == "move" || arguments[0] == "go") {
 			player->Move(arguments);
+		}
+		else if (arguments[0] == "take" || arguments[0] == "get")
+		{
+			player->Take(arguments);
 		}
 		//TO DO
 		break;

@@ -1,5 +1,6 @@
 #include "Entity.h"
 #include <iostream>
+#include "Helpers.h"
 
 Entity::Entity(const char* name, const char* description, Entity* parent) : name(name), description(description), parent(parent)
 {
@@ -52,4 +53,14 @@ void Entity::AddChild(Entity* child)
 void Entity::RemoveChild(Entity* child)
 {
 	children.remove(child);
+}
+
+Entity* Entity::Find(const std::string& name, EntityType type) const
+{
+	for (const auto& child : children) {
+		if (child->GetType() == type && toLowerCase(child->name) == toLowerCase(name)) {
+			return child;
+		}
+	}
+	return nullptr;
 }

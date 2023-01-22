@@ -2,6 +2,8 @@
 #include "Exit.h"
 #include "Direction.h"
 #include <iostream>
+#include "Item.h"
+#include <vector>
 
 Room::Room(const char* name, const char* description) : Entity(name, description, NULL)
 {
@@ -15,10 +17,24 @@ void Room::Look() const
     for (const auto& child : GetChildren()) {
         if (auto ex = dynamic_cast<const Exit*>(child)) {
             std::cout << "\nAt the direction " << DirectionToString(ex->GetDirection())
-                << " you see an exit to " << ex->GetDestinationRoom()->name << ".";
+                << " you see an exit to " << ex->GetDestinationRoom()->name << "." << std::endl;
         }
     }
-    std::cout << "\n";
+
+    //Get all the items
+    std::vector<const Item*> items;
+    for (const auto& child : GetChildren()) {
+        if (auto item = dynamic_cast<const Item*>(child)) {
+            items.push_back(item);
+        }
+    }
+    //Print the items if there are any
+    if (!items.empty()) {
+        std::cout << "\nThere are following items in the room:" << std::endl;
+        for (const auto& item : items) {
+            std::cout << item->name << std::endl;
+        }
+    }
 }
 
 const Exit* Room::GetExit(Direction direction) const

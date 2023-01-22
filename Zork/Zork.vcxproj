@@ -157,6 +157,7 @@
     <ClInclude Include="Exit.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="ItemType.h" />
     <ClInclude Include="Npc.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Room.h" />

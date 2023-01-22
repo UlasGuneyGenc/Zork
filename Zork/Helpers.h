@@ -6,7 +6,7 @@
 #include <vector>
 #include <algorithm>
 
-std::vector<std::string> GetVerbs(std::string input)
+inline std::vector<std::string> GetVerbs(std::string input)
 {
     std::vector<std::string> verbs;
     std::stringstream ss(input);
@@ -17,7 +17,7 @@ std::vector<std::string> GetVerbs(std::string input)
     return verbs;
 }
 
-std::string toLowerCase(std::string str) {
+inline std::string toLowerCase(std::string str) {
     std::transform(str.begin(), str.end(), str.begin(), ::tolower);
     return str;
 }

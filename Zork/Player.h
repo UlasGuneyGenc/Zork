@@ -7,5 +7,5 @@ class Player : public Creature
 public:
 	Player(const char* name, const char* description, Room* room);
 	void Move(const std::vector<std::string>& arguments);
-
+	void Take(const std::vector<std::string>& args);
 };

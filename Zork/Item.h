@@ -1,7 +1,11 @@
 #pragma once
 #include "Entity.h"
+#include "EntityType.h"
+#include "ItemType.h"
 
 class Item : public Entity
 {
-	Item(const char* name, const char* description, Entity* parent);
+public:
+	Item(const char* name, const char* description, Entity* parent, ItemType itemType);
+	const EntityType GetType() const;
 };
