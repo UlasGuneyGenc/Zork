@@ -23,12 +23,12 @@ const EntityType Entity::GetType() const
 	return EntityType::ENTITY;
 }
 
-Entity* Entity::GetParent()
+const Entity* Entity::GetParent() const
 {
 	return parent;
 }
 
-void Entity::ChangeParent(Entity* newParent)
+const void Entity::ChangeParent(Entity* newParent)
 {
 	if (parent) {
 		parent->RemoveChild(this);

@@ -5,7 +5,6 @@
 
 int main()
 {
-
     //Initiliaze world
     World world;
 	std::string player_input;

@@ -48,20 +48,23 @@ World::~World()
 	entities.clear();
 }
 
-void World::HandleInput(const std::vector<std::string>& words)
+void World::HandleInput(const std::vector<std::string>& arguments)
 {
-	switch (words.size()) {
+	switch (arguments.size()) {
 	case 0:
 		std::cout << "You did not type anything!" << std::endl;
 		break;
 	case 1:
-		if (words[0] == "exit" || words[0] == "quit" || words[0] == "q") {
+		if (arguments[0] == "exit" || arguments[0] == "quit" || arguments[0] == "q") {
 			gameOver = true;
 		}
 		else
 			std::cout << "I did not understand you!" << std::endl;
 		break;
 	case 2:
+		if (arguments[0] == "move" || arguments[0] == "go") {
+			player->Move(arguments);
+		}
 		//TO DO
 		break;
 	case 3:

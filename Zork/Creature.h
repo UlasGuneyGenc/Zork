@@ -6,4 +6,5 @@ class Creature : public Entity
 {
 public:
 	Creature(const char* name, const char* description, Room* room);
+	const Room* GetRoom() const;
 };
