@@ -8,6 +8,11 @@ Player::Player(const char* name, const char* description, Room* room) : Creature
 {
 }
 
+void Player::Look() const
+{
+	GetParent()->Look();
+}
+
 void Player::Move(const std::vector<std::string>& arguments)
 {
 	const Exit* wantedExit = GetRoom()->GetExit(StringToDirection(arguments[1]));
@@ -120,4 +125,27 @@ void Player::Examine(const std::vector<std::string>& arguments)
 		}
 		break;
 	}
+}
+
+void Player::Inventory()
+{
+	std::vector<const Item*> itemsInBag;
+	for (const auto& child : GetChildren()) {
+		if (auto childItem = dynamic_cast<const Item*>(child)) {
+			itemsInBag.push_back(childItem);
+		}
+	}
+
+	//Print the items that we have if there are any
+	if (!itemsInBag.empty()) {
+		std::cout << "\nThere are following items in the inventory:" << std::endl;
+		for (const auto& item : itemsInBag) {
+			std::cout << "- " << item->name << std::endl;
+		}
+	}
+	else
+	{
+		std::cout << "There is nothing in your inventory." << std::endl;
+	}
+
 }

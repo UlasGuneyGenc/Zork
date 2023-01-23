@@ -69,7 +69,10 @@ void World::HandleInput(const std::vector<std::string>& arguments)
 			gameOver = true;
 		}
 		else if (arguments[0] == "look" || arguments[0] == "info") {
-			player->GetParent()->Look();
+			player->Look();
+		}
+		else if (arguments[0] == "bag" || arguments[0] == "inventory" || arguments[0] == "b" || arguments[0] == "i") {
+			player->Inventory();
 		}
 		else
 			std::cout << "I did not understand you!" << std::endl;
