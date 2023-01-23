@@ -11,7 +11,7 @@ Room::Room(const char* name, const char* description) : Entity(name, description
 
 void Room::Look() const
 {
-    std::cout << "You are in " << name << ". " << description << std::endl;
+    std::cout << "You are in " << name << ". " << description << std::endl << std::endl;
 
     //Get all exits and print them
     for (const auto& child : GetChildren()) {

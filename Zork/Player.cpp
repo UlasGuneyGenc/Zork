@@ -82,10 +82,14 @@ void Player::Examine(const std::vector<std::string>& arguments)
 		return;
 	}
 
-	//Try to find the thing we want to examine
-	Entity* entity = (Item*)(GetParent()->Find(arguments[1], EntityType::ITEM));
+	//Try to find the thing we want to examine in the room
+	Entity* entity = GetParent()->Find(arguments[1], EntityType::ITEM);
+	if (!entity)
+	{
+		entity = Find(arguments[1], EntityType::ITEM);
+	}
 
-	if (entity == nullptr)
+	if (!entity)
 	{
 		std::cout << "There is no such thing as a '" << arguments[1] << "'" << std::endl;
 		return;
@@ -111,7 +115,7 @@ void Player::Examine(const std::vector<std::string>& arguments)
 		if (!itemsInStorage.empty()) {
 			std::cout << std::endl << "There are following items in the '" << entity->name << "'" << std::endl;
 			for (const auto& item : itemsInStorage) {
-				std::cout << "- " << item->name << std::endl;
+				std::cout << "- " << item->name <<": " << item->description<< std::endl;
 			}
 		}
 		break;
