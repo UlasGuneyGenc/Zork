@@ -5,6 +5,7 @@
 #include "Exit.h"
 #include <list>
 #include "Item.h"
+#include "Stats.h"
 
 World::World()
 {
@@ -22,7 +23,7 @@ World::World()
 
 
 	// Create player
-	Player* player = new Player("Hero", "Mighty hero!", abandonedChurch);
+	Player* player = new Player("Hero", "Mighty hero!", abandonedChurch,BuffType::NONE, new Stats(40,40,40));
 	this->player = player;
 
 	// Create exits
@@ -32,11 +33,13 @@ World::World()
 	Exit* exitGraveyardToGarden = new Exit("Muddy broken wall", "The exit from the graveyard leads to a small, overgrown garden.", Direction::EAST, graveyard, garden);
 
 	//Create storage items
-	Item* smallChest = new Item("Chest", "Small wooden chest is worn and weathered, crafted from rough-hewn planks of wood. Iron hinges and lock rusted with age, giving off a sense of mystery.", abandonedChurch, ItemType::STORAGE);
+	Item* smallChest = new Item("Chest", "Small wooden chest is worn and weathered, crafted from rough-hewn planks of wood. Iron hinges and lock rusted with age, giving off a sense of mystery.", abandonedChurch, ItemType::STORAGE, BuffType::NONE, Stats());
 
 
 	//Create items in the storages
-	Item* rustyKey = new Item("Key", "Rusty Iron key, small and worn, covered in rust, teeth still sharp.",smallChest,ItemType::KEY);
+	Item* rustyKey = new Item("Key", "Rusty Iron key, small and worn, covered in rust, teeth still sharp.", smallChest, ItemType::KEY, BuffType::NONE, Stats());
+	Item* fireBuff = new Item("FireScroll", "A magical scroll that warms your heart even at the sight of it.", smallChest, ItemType::BUFF, BuffType::FIRE, Stats());
+
 
 
 	entities.push_back(abandonedChurch);
@@ -74,6 +77,9 @@ void World::HandleInput(const std::vector<std::string>& arguments)
 		else if (arguments[0] == "bag" || arguments[0] == "inventory" || arguments[0] == "b" || arguments[0] == "i") {
 			player->Inventory();
 		}
+		else if (arguments[0] == "stats" || arguments[0] == "stat") {
+			player->GetInfo();
+		}
 		else
 			std::cout << "I did not understand you!" << std::endl;
 		break;
@@ -89,9 +95,13 @@ void World::HandleInput(const std::vector<std::string>& arguments)
 		{
 			player->Drop(arguments);
 		}
-		else if (arguments[0] == "examine" || arguments[0] == "info")
+		else if (arguments[0] == "examine" || arguments[0] == "info" || arguments[0] == "look")
 		{
 			player->Examine(arguments);
+		}
+		else if (arguments[0] == "use")
+		{
+			player->UseBuff(arguments);
 		}
 		//TO DO
 		break;

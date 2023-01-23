@@ -3,14 +3,20 @@
 #include "Direction.h"
 #include <iostream>
 #include "Item.h"
+#include "Stats.h"
 
-Player::Player(const char* name, const char* description, Room* room) : Creature(name, description, room)
+
+Player::Player(const char* name, const char* description, Room* room, BuffType buffType, Stats* stats) : Creature(name, description, room, buffType, stats)
 {
 }
 
 void Player::Look() const
 {
 	GetParent()->Look();
+}
+
+void Player::Update()
+{
 }
 
 void Player::Move(const std::vector<std::string>& arguments)
@@ -104,13 +110,15 @@ void Player::Examine(const std::vector<std::string>& arguments)
 	switch (entity->GetType())
 	{
 	case EntityType::ITEM:
-		std::cout << std::endl << "Name: " << entity->name<<std::endl;
-		std::cout << "Description: " << entity->description << std::endl;
+		Item* targetItem = (Item*)entity;
+		std::cout << std::endl << "Name: " << targetItem->name<<std::endl;
+		std::cout << "Description: " << targetItem->description << std::endl;
+		std::cout << "Buff type: " << BuffTypeToString(targetItem->GetBuffType()) << std::endl;
 
 
 		//Get all the items
 		std::vector<const Item*> itemsInStorage;
-		for (const auto& child : entity->GetChildren()) {
+		for (const auto& child : targetItem->GetChildren()) {
 			if (auto childItem = dynamic_cast<const Item*>(child)) {
 				itemsInStorage.push_back(childItem);
 			}
@@ -118,12 +126,44 @@ void Player::Examine(const std::vector<std::string>& arguments)
 
 		//Now lets check if the item has something inside of it
 		if (!itemsInStorage.empty()) {
-			std::cout << std::endl << "There are following items in the '" << entity->name << "'" << std::endl;
+			std::cout << std::endl << "There are following items in the '" << targetItem->name << "'" << std::endl;
 			for (const auto& item : itemsInStorage) {
 				std::cout << "- " << item->name <<": " << item->description<< std::endl;
 			}
 		}
 		break;
+	}
+}
+
+void Player::UseBuff(const std::vector<std::string>& arguments)
+{
+	//Trying to find the thing we want to equip in our inventory
+	Entity* entity = Find(arguments[1], EntityType::ITEM);
+	if (!entity)
+	{
+		entity = Find(arguments[1], EntityType::ITEM);
+	}
+
+	if (!entity)
+	{
+		std::cout << "There is no such thing as a '" << arguments[1] << "' in your bag!" << std::endl;
+		return;
+	}
+	Item* item = (Item*)entity;
+	//Now we will check if the item is buff
+	if (item)
+	{
+		if (item->GetItemType() == ItemType::BUFF)
+		{
+			// do something with buff item
+			buffType = item->GetBuffType();
+			CalculateBuffEffect();
+			std::cout << "You now have the '" << BuffTypeToString(buffType)<<"' buff." << std::endl;
+		}
+		else
+		{
+			std::cout << "This item can not be used" << std::endl;
+		}
 	}
 }
 
@@ -149,3 +189,4 @@ void Player::Inventory()
 	}
 
 }
+

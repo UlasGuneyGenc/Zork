@@ -1,5 +1,5 @@
 #include "Npc.h"
 
-Npc::Npc(const char* name, const char* description, Room* room) : Creature(name, description, room)
+Npc::Npc(const char* name, const char* description, Room* room, BuffType buffType, Stats* stats) : Creature(name, description, room, buffType, stats)
 {
 }
