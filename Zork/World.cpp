@@ -12,7 +12,8 @@ World::World()
 	std::cout << "You slowly open your eyes and find yourself lying on a cold, stone floor." << std::endl;
 	std::cout << "You appear to be in an abandoned church, with boarded-up windows and overturned pews." << std::endl;
 	std::cout << "You can't remember how you got here or why you're here. But you realize that you have to find your way out." << std::endl;
-	
+	std::cout << "------------------------------------------------------" << std::endl;
+
 
 	// Create rooms
 	Room* abandonedChurch = new Room("Abandoned Church", "Abandoned Church is a decaying, boarded-up structure. Pews overturned and altar is covered in dust and cobwebs. Scent of decay and neglect lingers in the air.");
@@ -81,10 +82,24 @@ void World::HandleInput(const std::vector<std::string>& arguments)
 		{
 			player->Take(arguments);
 		}
+		else if (arguments[0] == "drop" )
+		{
+			player->Drop(arguments);
+		}
+		else if (arguments[0] == "examine" || arguments[0] == "info")
+		{
+			player->Examine(arguments);
+		}
 		//TO DO
 		break;
 	case 3:
 		//TO DO
+		break;
+	case 4:
+		if ((arguments[0] == "take" || arguments[0] == "get") && arguments[2] == "from")
+		{
+			player->Take(arguments);
+		}
 		break;
 	default:
 		std::cout << "I did not understand you!" << std::endl;

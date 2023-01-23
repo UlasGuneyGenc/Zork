@@ -16,7 +16,7 @@ void Room::Look() const
     //Get all exits and print them
     for (const auto& child : GetChildren()) {
         if (auto ex = dynamic_cast<const Exit*>(child)) {
-            std::cout << "\nAt the direction " << DirectionToString(ex->GetDirection())
+            std::cout << "At the direction " << DirectionToString(ex->GetDirection())
                 << " you see an exit to " << ex->GetDestinationRoom()->name << "." << std::endl;
         }
     }
