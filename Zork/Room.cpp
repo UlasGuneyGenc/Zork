@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Item.h"
 #include <vector>
+#include "Npc.h"
 
 Room::Room(const char* name, const char* description) : Entity(name, description, NULL)
 {
@@ -35,6 +36,15 @@ void Room::Look() const
             std::cout << item->name << std::endl;
         }
     }
+
+    //Get the monsters and display them
+    for (const auto& child : GetChildren()) {
+        if (auto monster = dynamic_cast<const Npc*>(child)) {
+            std::cout << "\nThere is a monster called '"<< monster->name <<"' in the room." << std::endl;
+
+        }
+    }
+    
 }
 
 const Exit* Room::GetExit(Direction direction) const

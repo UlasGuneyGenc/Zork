@@ -4,3 +4,8 @@ Npc::Npc(const char* name, const char* description, Room* room, BuffType buffTyp
 {
 	this->buffType = buffType;
 }
+
+const EntityType Npc::GetType() const
+{
+	return EntityType::NPC;
+}

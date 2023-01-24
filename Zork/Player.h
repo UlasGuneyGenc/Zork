@@ -1,6 +1,7 @@
 #pragma once
 #include "Creature.h"
 #include <vector>
+#include "Npc.h"
 
 class Player : public Creature
 {
@@ -14,6 +15,7 @@ public:
 	void Examine(const std::vector<std::string>& arguments);
 	void Equip(const std::vector<std::string>& arguments);
 	void UnEquip(const std::vector<std::string>& arguments);
+	const Npc* GetMonsterFromRoom() const;
 	void Inventory();
 
 };

@@ -58,7 +58,17 @@ void Entity::RemoveChild(Entity* child)
 Entity* Entity::Find(const std::string& name, EntityType type) const
 {
 	for (const auto& child : children) {
-		if (child->GetType() == type && toLowerCase(child->name) == toLowerCase(name)) {
+		if (toLowerCase(child->name) == toLowerCase(name)) {
+			return child;
+		}
+	}
+	return nullptr;
+}
+
+Entity* Entity::Find(const std::string& name) const
+{
+	for (const auto& child : children) {
+		if (toLowerCase(child->name) == toLowerCase(name)) {
 			return child;
 		}
 	}

@@ -34,7 +34,7 @@ void Player::Take(const std::vector<std::string>& arguments)
 	switch (arguments.size()) {
 	case 2:
 	{
-		Item* item = (Item*)(GetParent()->Find(arguments[1], EntityType::ITEM));
+		Item* item = (Item*)(GetParent()->Find(arguments[1]),EntityType::ITEM);
 		if (item == nullptr)
 		{
 			std::cout << "There is no item named '" << arguments[1] << "' in the current room." << std::endl;
@@ -46,7 +46,7 @@ void Player::Take(const std::vector<std::string>& arguments)
 	}
 	case 4:
 	{
-		Entity* entity = (Item*)(GetParent()->Find(arguments[3], EntityType::ITEM));
+		Entity* entity = (Item*)(GetParent()->Find(arguments[3]), EntityType::ITEM);
 		if (entity == nullptr)
 		{
 			std::cout << "There is no such thing as '" << arguments[1] << "'" << std::endl;
@@ -54,7 +54,7 @@ void Player::Take(const std::vector<std::string>& arguments)
 		}
 		if (entity->GetType() == EntityType::ITEM)
 		{
-			Item* childItem = (Item*)(entity->Find(arguments[1], EntityType::ITEM));
+			Item* childItem = (Item*)(entity->Find(arguments[1]));
 			if (childItem == nullptr)
 			{
 				std::cout << "There is no item named '" << arguments[1] << "' in the " << "'" << entity->name << "'" << std::endl;
@@ -72,7 +72,7 @@ void Player::Take(const std::vector<std::string>& arguments)
 
 void Player::Drop(const std::vector<std::string>& arguments)
 {
-	Item* item = (Item*)(Find(arguments[1], EntityType::ITEM));
+	Item* item = (Item*)(Find(arguments[1]), EntityType::ITEM);
 	if (item == nullptr)
 	{
 		std::cout << "There is no item named '" << arguments[1] << "' in your bag." << std::endl;
@@ -110,10 +110,10 @@ void Player::Examine(const std::vector<std::string>& arguments)
 	}
 
 	//Try to find the thing we want to examine in the room
-	Entity* entity = GetParent()->Find(arguments[1], EntityType::ITEM);
+	Entity* entity = GetParent()->Find(arguments[1]);
 	if (!entity)
 	{
-		entity = Find(arguments[1], EntityType::ITEM);
+		entity = Find(arguments[1]);
 	}
 
 	if (!entity)
@@ -123,14 +123,11 @@ void Player::Examine(const std::vector<std::string>& arguments)
 	}
 	
 	//If there is something like that check it if it's an item,creature etc
-	switch (entity->GetType())
-	{
-	case EntityType::ITEM:
+	if (entity->GetType() == EntityType::ITEM) {
 		Item* targetItem = (Item*)entity;
-		std::cout << std::endl << "Name: " << targetItem->name<<std::endl;
+		std::cout << std::endl << "Name: " << targetItem->name << std::endl;
 		std::cout << "Description: " << targetItem->description << std::endl;
 		std::cout << "Buff type: " << BuffTypeToString(targetItem->GetBuffType()) << std::endl;
-
 
 		//Get all the items
 		std::vector<const Item*> itemsInStorage;
@@ -144,10 +141,15 @@ void Player::Examine(const std::vector<std::string>& arguments)
 		if (!itemsInStorage.empty()) {
 			std::cout << std::endl << "There are following items in the '" << targetItem->name << "'" << std::endl;
 			for (const auto& item : itemsInStorage) {
-				std::cout << "- " << item->name <<": " << item->description<< std::endl;
+				std::cout << "- " << item->name << ": " << item->description << std::endl;
 			}
 		}
-		break;
+	}
+	else if (entity->GetType() == EntityType::NPC) {
+		const Npc* targetNpc = (Npc*)entity;
+		std::cout << std::endl << "Name: " << targetNpc->name << std::endl;
+		std::cout << "Description: " << targetNpc->description << std::endl;
+		targetNpc->GetInfo();
 	}
 }
 
@@ -156,10 +158,6 @@ void Player::Equip(const std::vector<std::string>& arguments)
 {
 	//Trying to find the thing we want to equip in our inventory
 	Entity* entity = Find(arguments[1], EntityType::ITEM);
-	if (!entity)
-	{
-		entity = Find(arguments[1], EntityType::ITEM);
-	}
 
 	if (!entity)
 	{
@@ -205,11 +203,8 @@ void Player::UnEquip(const std::vector<std::string>& arguments)
 		return;
 	}
 	//Trying to find the thing we want to equip in our slots
-	Entity* entity = Find(arguments[1], EntityType::ITEM);
-	if (!entity)
-	{
-		entity = Find(arguments[1], EntityType::ITEM);
-	}
+	Entity* entity = Find(arguments[1]);
+	
 
 	if (!entity)
 	{
@@ -237,6 +232,19 @@ void Player::UnEquip(const std::vector<std::string>& arguments)
 		CalculateStat();
 		std::cout << "You unequipped '" << item->name << "' buff." << std::endl;
 	}
+}
+
+const Npc* Player::GetMonsterFromRoom() const
+{
+	Npc* enemy = nullptr;
+
+	// Search for enemy in the room
+	for (const auto& child : GetChildren()) {
+		if (auto ex = dynamic_cast<const Npc*>(child)) {
+			enemy = (Npc*)ex;
+		}
+	}
+	return enemy;
 }
 
 void Player::Inventory()

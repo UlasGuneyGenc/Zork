@@ -17,6 +17,7 @@ public:
 	virtual void AddChild(Entity* child);
 	virtual void RemoveChild(Entity* child);
 	Entity* Find(const std::string& name, EntityType type) const;
+	Entity* Find(const std::string& childName) const;
 
 	std::string name;
 	std::string description;
