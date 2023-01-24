@@ -2,7 +2,7 @@
 #include <iostream>
 #include <map>
 
-Creature::Creature(const char* name, const char* description, Room* room, BuffType buffType, Stats* stats) : Entity(name, description, (Entity*)room)
+Creature::Creature(const char* name, const char* description, Room* room, Stats* stats) : Entity(name, description, (Entity*)room)
 {
 	this->stats = stats;
 	currentHealth = stats->getHealth();
@@ -30,7 +30,7 @@ const EntityType Creature::GetType() const
 
 void Creature::GetInfo() const
 {
-	std::cout << std::endl << "Your stats" << std::endl;
+	std::cout << std::endl << name<<"'s stats" << std::endl;
 	std::cout << "  Health:  " << currentHealth << "/" << stats->getHealth() << std::endl;
 	std::cout << "  Attack:  " << stats->getAttack() << std::endl;
 	std::cout << "  Defence: " << stats->getDefence() << std::endl;

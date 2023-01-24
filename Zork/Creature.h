@@ -8,7 +8,7 @@
 class Creature : public Entity
 {
 public:
-	Creature(const char* name, const char* description, Room* room, BuffType buffType, Stats* stats);
+	Creature(const char* name, const char* description, Room* room, Stats* stats);
 	const Room* GetRoom() const;
 	virtual void Update();
 	virtual const EntityType GetType() const;

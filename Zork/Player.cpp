@@ -6,7 +6,7 @@
 #include "Stats.h"
 
 
-Player::Player(const char* name, const char* description, Room* room, BuffType buffType, Stats* stats) : Creature(name, description, room, buffType, stats)
+Player::Player(const char* name, const char* description, Room* room, Stats* stats) : Creature(name, description, room, stats)
 {
 }
 

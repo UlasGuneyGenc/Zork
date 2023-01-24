@@ -5,7 +5,7 @@
 class Player : public Creature
 {
 public:
-	Player(const char* name, const char* description, Room* room, BuffType buffType, Stats* stats);
+	Player(const char* name, const char* description, Room* room, Stats* stats);
 	virtual void Look() const;
 	virtual void Update();
 	void Move(const std::vector<std::string>& arguments);

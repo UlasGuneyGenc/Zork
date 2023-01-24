@@ -23,7 +23,7 @@ World::World()
 
 
 	// Create player
-	Player* player = new Player("Hero", "Mighty hero!", abandonedChurch,BuffType::NONE, new Stats(40,40,40));
+	Player* player = new Player("Hero", "Mighty hero!", abandonedChurch, new Stats(40,40,40));
 	this->player = player;
 
 	// Create exits
