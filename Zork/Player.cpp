@@ -81,6 +81,22 @@ void Player::Drop(const std::vector<std::string>& arguments)
 
 	item->ChangeParent((Entity*)GetRoom());
 
+	if (item == weapon)
+	{
+		weapon = nullptr;
+		CalculateStat();
+	}
+	else if (item == armor)
+	{
+		armor = nullptr;
+		CalculateStat();
+	}
+	else if (item == buffItem)
+	{
+		buffItem = nullptr;
+		CalculateStat();
+	}
+
 	std::cout << "You dropped the '" << item->name << "'." << std::endl;
 }
 
@@ -135,7 +151,8 @@ void Player::Examine(const std::vector<std::string>& arguments)
 	}
 }
 
-void Player::UseBuff(const std::vector<std::string>& arguments)
+
+void Player::Equip(const std::vector<std::string>& arguments)
 {
 	//Trying to find the thing we want to equip in our inventory
 	Entity* entity = Find(arguments[1], EntityType::ITEM);
@@ -150,20 +167,75 @@ void Player::UseBuff(const std::vector<std::string>& arguments)
 		return;
 	}
 	Item* item = (Item*)entity;
+
 	//Now we will check if the item is buff
 	if (item)
 	{
-		if (item->GetItemType() == ItemType::BUFF)
+		if (item->GetItemType() == ItemType::WEAPON)
 		{
 			// do something with buff item
-			buffType = item->GetBuffType();
-			CalculateBuffEffect();
-			std::cout << "You now have the '" << BuffTypeToString(buffType)<<"' buff." << std::endl;
+			weapon = item;
+			CalculateStat();
+			std::cout << "You equipped '" << item->name << "' weapon." << std::endl;
+		}
+		else if (item->GetItemType() == ItemType::ARMOR)
+		{
+			armor = item;
+			CalculateStat();
+			std::cout << "You equipped '" << item->name << "' armor." << std::endl;
+		}
+		else if (item->GetItemType() == ItemType::BUFF)
+		{
+			buffItem = item;
+			CalculateStat();
+			std::cout << "You now have the '" << BuffTypeToString(buffItem->GetBuffType()) << "' buff." << std::endl;
 		}
 		else
 		{
-			std::cout << "This item can not be used" << std::endl;
+			std::cout << "This item can not be equipped" << std::endl;
 		}
+	}
+}
+
+void Player::UnEquip(const std::vector<std::string>& arguments)
+{
+	if (!weapon && !armor && !buffItem)
+	{
+		std::cout << "There is nothing equipped right now!" << std::endl;
+		return;
+	}
+	//Trying to find the thing we want to equip in our slots
+	Entity* entity = Find(arguments[1], EntityType::ITEM);
+	if (!entity)
+	{
+		entity = Find(arguments[1], EntityType::ITEM);
+	}
+
+	if (!entity)
+	{
+		std::cout << "There is no equipped thing as '" << arguments[1] << "' on you!" << std::endl;
+		return;
+	}
+	Item* item = (Item*)entity;
+
+	//Now we will check if the item is weapon,armor or buff
+	if (item == weapon)
+	{
+		weapon = nullptr;
+		CalculateStat();
+		std::cout << "You unequipped '" << item->name << "' weapon." << std::endl;
+	}
+	else if (item == armor)
+	{
+		armor = nullptr;
+		CalculateStat();
+		std::cout << "You unequipped '" << item->name << "' armor." << std::endl;
+	}
+	else if (item == buffItem)
+	{
+		buffItem = nullptr;
+		CalculateStat();
+		std::cout << "You unequipped '" << item->name << "' buff." << std::endl;
 	}
 }
 

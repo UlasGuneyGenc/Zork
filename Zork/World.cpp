@@ -39,6 +39,7 @@ World::World()
 	//Create items in the storages
 	Item* rustyKey = new Item("Key", "Rusty Iron key, small and worn, covered in rust, teeth still sharp.", smallChest, ItemType::KEY, BuffType::NONE, Stats());
 	Item* fireBuff = new Item("FireScroll", "A magical scroll that warms your heart even at the sight of it.", smallChest, ItemType::BUFF, BuffType::FIRE, Stats());
+	Item* sword = new Item("Sword", "Tiny rusty metal sword.", smallChest, ItemType::WEAPON, BuffType::NONE, Stats(5,20,5));
 
 
 
@@ -99,9 +100,13 @@ void World::HandleInput(const std::vector<std::string>& arguments)
 		{
 			player->Examine(arguments);
 		}
-		else if (arguments[0] == "use")
+		else if (arguments[0] == "equip" || arguments[0] == "eq")
 		{
-			player->UseBuff(arguments);
+			player->Equip(arguments);
+		}
+		else if (arguments[0] == "unequip")
+		{
+			player->UnEquip(arguments);
 		}
 		//TO DO
 		break;

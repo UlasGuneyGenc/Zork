@@ -13,10 +13,10 @@ public:
 	virtual void Update();
 	virtual const EntityType GetType() const;
 	virtual void GetInfo() const;
-	void CalculateBuffEffect();
+	void CalculateStat();
 
 protected:
-	BuffType buffType;
+	Item* buffItem;
 	Item* weapon;
 	Item* armor;
 	Stats* stats;

@@ -35,6 +35,13 @@ void Stats::setDefence(int newDefence)
     defence = newDefence;
 }
 
+void Stats::setAllNew(int h_amount, int a_amount, int d_amount)
+{
+    health = h_amount;
+    attack = a_amount;
+    defence = d_amount;
+}
+
 void Stats::modifyHealth(int amount)
 {
     health += amount;

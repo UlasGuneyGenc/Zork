@@ -15,6 +15,8 @@ public:
     void setHealth(int newHealth);
     void setAttack(int newAttack);
     void setDefence(int newDefence);
+    void setAllNew(int h_amount, int a_amount, int d_amount);
+
 
     void modifyAll(int h_amount, int a_amount, int d_amount);
     void modifyHealth(int amount);
