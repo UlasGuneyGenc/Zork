@@ -1,7 +1,7 @@
 #pragma once
 
 
-enum EntityType
+enum class EntityType
 {
 	ENTITY,
 	CREATURE,

@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Item.h"
 #include "Stats.h"
+#include "Room.h"
 
 
 Player::Player(const char* name, const char* description, Room* room, Stats* stats) : Creature(name, description, room, stats)
@@ -15,20 +16,19 @@ void Player::Look() const
 	GetParent()->Look();
 }
 
-void Player::Update()
-{
-}
-
 void Player::Move(const std::vector<std::string>& arguments)
 {
-	const Exit* wantedExit = GetRoom()->GetExit(StringToDirection(arguments[1]));
-	if (wantedExit && !wantedExit->locked)
-	{
-		ChangeParent((Entity*)wantedExit->GetDestinationRoom());
-		GetParent()->Look();
+	Exit* wantedExit = GetRoom()->GetExit(StringToDirection(arguments[1]));
+	if (!wantedExit) {
+		return;
 	}
-	else if (wantedExit && wantedExit->locked) {
+
+	if (wantedExit->IsLocked()) {
 		std::cout << "Exit is locked." << std::endl;
+	}
+	else {
+		ChangeParent(wantedExit->GetDestinationRoom());
+		GetParent()->Look();
 	}
 }
 
@@ -37,7 +37,7 @@ void Player::Take(const std::vector<std::string>& arguments)
 	switch (arguments.size()) {
 	case 2:
 	{
-		Item* item = (Item*)(GetParent()->Find(arguments[1], EntityType::ITEM));
+		Item* item = static_cast<Item*>(GetParent()->Find(arguments[1], EntityType::ITEM));
 		if (item == nullptr)
 		{
 			std::cout << "There is no item named '" << arguments[1] << "' in the current room." << std::endl;
@@ -49,7 +49,7 @@ void Player::Take(const std::vector<std::string>& arguments)
 	}
 	case 4:
 	{
-		Entity* entity = (Item*)(GetParent()->Find(arguments[3], EntityType::ITEM));
+		Entity* entity = static_cast<Item*>(GetParent()->Find(arguments[3], EntityType::ITEM));
 		if (entity == nullptr)
 		{
 			std::cout << "There is no such thing as '" << arguments[1] << "'" << std::endl;
@@ -57,7 +57,7 @@ void Player::Take(const std::vector<std::string>& arguments)
 		}
 		if (entity->GetType() == EntityType::ITEM)
 		{
-			Item* childItem = (Item*)(entity->Find(arguments[1]));
+			Item* childItem = static_cast<Item*>(entity->Find(arguments[1]));
 			if (childItem == nullptr)
 			{
 				std::cout << "There is no item named '" << arguments[1] << "' in the " << "'" << entity->name << "'" << std::endl;
@@ -75,7 +75,7 @@ void Player::Take(const std::vector<std::string>& arguments)
 
 void Player::Drop(const std::vector<std::string>& arguments)
 {
-	Item* item = (Item*)(Find(arguments[1]), EntityType::ITEM);
+	Item* item = static_cast<Item*>(Find(arguments[1], EntityType::ITEM));
 	if (item == nullptr)
 	{
 		std::cout << "There is no item named '" << arguments[1] << "' in your bag." << std::endl;
@@ -244,32 +244,39 @@ void Player::Attack(const std::vector<std::string>& arguments)
 
 void Player::Unlock(const std::vector<std::string>& arguments)
 {
-	const Exit* wantedExit = GetRoom()->GetExit(StringToDirection(arguments[1]));
+	Exit* wantedExit = GetRoom()->GetExit(StringToDirection(arguments[1]));
 
 	//check if exit exists and it is locked
-	if (wantedExit)
-	{
-		if (!wantedExit->locked)
-		{
-			std::cout << "Exit is not locked you don't need to unlock it!"<< std::endl;
-		}
-		else
-		{
-			const Item* key = wantedExit->GetKey();
-
-			//check if we have the key
-			Item* keyOnPlayer = (Item*)Find(key->name);
-			
-			if (keyOnPlayer)
-			{
-				wantedExit->Unlock();
-				keyOnPlayer->ChangeParent((Entity*)wantedExit);
-				std::cout << DirectionToString(wantedExit->GetDirection()) <<" exit is unlocked!" << std::endl;
-			}
-
-		}
+	if (!wantedExit) {
+		return;
 	}
 
+	if (!wantedExit->IsLocked())
+	{
+		std::cout << "Exit is not locked you don't need to unlock it!" << std::endl;
+	}
+	else {
+		const Item* key = wantedExit->GetKey();
+
+		//check if we have the key
+		Item* keyOnPlayer = (Item*)Find(key->name);
+
+		if (keyOnPlayer)
+		{
+			wantedExit->Unlock();
+			keyOnPlayer->ChangeParent((Entity*)wantedExit);
+			std::cout << DirectionToString(wantedExit->GetDirection()) << " exit is unlocked!" << std::endl;
+		}
+	}
+}
+
+void Player::Detail(const std::vector<std::string>& arguments)
+{
+	const Exit* wantedExit = GetRoom()->GetExit(StringToDirection(arguments[1]));
+	if (wantedExit)
+	{
+		wantedExit->Look();
+	}
 }
 
 void Player::Use(const std::vector<std::string>& arguments)
@@ -293,7 +300,7 @@ void Player::Use(const std::vector<std::string>& arguments)
 	}
 }
 
-void Player::Inventory()
+void Player::ShowInventory()
 {
 	std::vector<Item*> itemsInBag;
 	for (const auto& child : GetChildren()) {
@@ -314,5 +321,11 @@ void Player::Inventory()
 		std::cout << "There is nothing in your inventory." << std::endl;
 	}
 
+}
+
+bool Player::Die()
+{
+	currentHealth = 0;
+	return false;
 }
 

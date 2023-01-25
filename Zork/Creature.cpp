@@ -3,6 +3,7 @@
 #include <map>
 #include "Npc.h"
 #include <thread>
+#include "Room.h"
 
 Creature::Creature(const char* name, const char* description, Room* room, Stats* stats) : Entity(name, description, (Entity*)room)
 {
@@ -10,11 +11,11 @@ Creature::Creature(const char* name, const char* description, Room* room, Stats*
 	currentHealth = stats->getHealth();
 }
 
-const Room* Creature::GetRoom() const
+Room* Creature::GetRoom() const
 {
 	if (GetParent()->GetType() == EntityType::ROOM)
 	{
-		return (Room*)GetParent();
+		return static_cast<Room*>(GetParent());
 	}
 	return nullptr;
 }
@@ -133,7 +134,7 @@ void Creature::DropAllItems()
 
 void Creature::CalculateStat()
 {
-    int previous_damage = stats->getHealth() - currentHealth;
+    const int previous_damage = stats->getHealth() - currentHealth;
 
     // Initialize the stats with default values
     stats->setAllNew(40, 40, 40);
@@ -151,16 +152,16 @@ void Creature::CalculateStat()
     if (buffItem)
     {
         const Stats modifications = buffTypeModifiers.at(buffItem->GetBuffType());
-        stats->modifyAll(modifications.getHealth(), modifications.getAttack(), modifications.getDefence());
+        stats->incrementAll(modifications.getHealth(), modifications.getAttack(), modifications.getDefence());
     }
     // Apply stat modifications based on equipped items
     if (weapon) {
         const auto weapon_stats = weapon->GetStats();
-        stats->modifyAll(weapon_stats.getHealth(), weapon_stats.getAttack(), weapon_stats.getDefence());
+        stats->incrementAll(weapon_stats.getHealth(), weapon_stats.getAttack(), weapon_stats.getDefence());
     }
     if (armor) {
         const auto armor_stats = armor->GetStats();
-        stats->modifyAll(armor_stats.getHealth(), armor_stats.getAttack(), armor_stats.getDefence());
+        stats->incrementAll(armor_stats.getHealth(), armor_stats.getAttack(), armor_stats.getDefence());
     }
 
     // Ensure currentHealth is not greater than max health and if there is a damage keep it

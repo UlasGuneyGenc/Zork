@@ -7,14 +7,14 @@ int main()
 {
     //Initiliaze world
     World world;
-	std::string player_input;
+	std::string playerInput;
 
 	//loop to enter string
 	while (!world.IsGameOver())
 	{
-		getline(std::cin, player_input);
+		getline(std::cin, playerInput);
 
-		std::vector<std::string> verbs = GetVerbs(toLowerCase(player_input));
+		std::vector<std::string> verbs = GetVerbs(toLowerCase(playerInput));
 		world.HandleInput(verbs);
 	}
 

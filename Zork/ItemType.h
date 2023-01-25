@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-enum ItemType
+enum class ItemType
 {
 	KEY,
 	WEAPON,
@@ -9,7 +9,6 @@ enum ItemType
     STORAGE,
     BUFF,
     POTION
-    
 };
 
 inline const char* ItemTypeToString(const ItemType itemType)

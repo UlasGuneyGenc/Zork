@@ -42,22 +42,22 @@ void Stats::setAllNew(int h_amount, int a_amount, int d_amount)
     defence = d_amount;
 }
 
-void Stats::modifyHealth(int amount)
+void Stats::incrementHealth(int amount)
 {
     health += amount;
 }
 
-void Stats::modifyAttack(int amount)
+void Stats::incrementAttack(int amount)
 {
     attack += amount;
 }
 
-void Stats::modifyDefence(int amount)
+void Stats::incrementDefence(int amount)
 {
     defence += amount;
 }
 
-void Stats::modifyAll(int h_amount, int a_amount, int d_amount)
+void Stats::incrementAll(int h_amount, int a_amount, int d_amount)
 {
     health += h_amount;
     attack += a_amount;

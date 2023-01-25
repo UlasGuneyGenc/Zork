@@ -22,7 +22,7 @@ const Direction Exit::GetDirection() const
 	return direction;
 }
 
-const Room* Exit::GetDestinationRoom() const
+Room* Exit::GetDestinationRoom() const
 {
 	return destination;
 }
@@ -32,9 +32,19 @@ const Item* Exit::GetKey() const
 	return key;
 }
 
-const void Exit::Unlock() const
+void Exit::Unlock()
 {
 	locked = false;
+}
+
+bool Exit::IsLocked()
+{
+	return locked;
+}
+
+void Exit::Look() const
+{
+	std::cout << std::endl << "Exit name: "<< name << ". " << std::endl << "Description: " << description << std::endl;
 }
 
 

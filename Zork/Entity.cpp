@@ -6,8 +6,9 @@ Entity::Entity(const char* name, const char* description, Entity* parent) : name
 {
 	this->name = name;
 	this->description = description;
-	if (parent != NULL)
+	if (parent != nullptr) {
 		parent->AddChild(this);
+	}
 }
 
 void Entity::Look() const
@@ -24,7 +25,7 @@ const EntityType Entity::GetType() const
 	return EntityType::ENTITY;
 }
 
-const Entity* Entity::GetParent() const
+Entity* Entity::GetParent() const
 {
 	return parent;
 }

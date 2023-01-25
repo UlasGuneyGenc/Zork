@@ -18,8 +18,8 @@ public:
     void setAllNew(int h_amount, int a_amount, int d_amount);
 
 
-    void modifyAll(int h_amount, int a_amount, int d_amount);
-    void modifyHealth(int amount);
-    void modifyAttack(int amount);
-    void modifyDefence(int amount);
+    void incrementAll(int h_amount, int a_amount, int d_amount);
+    void incrementHealth(int amount);
+    void incrementAttack(int amount);
+    void incrementDefence(int amount);
 };

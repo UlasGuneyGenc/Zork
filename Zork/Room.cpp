@@ -13,10 +13,13 @@ Room::Room(const char* name, const char* description) : Entity(name, description
 void Room::Look() const
 {
     std::cout << "You are in " << name << ". " << description << std::endl << std::endl;
+    const std::list<Entity*>& all_children = GetChildren();
 
     //Get all exits and print them
     for (const auto& child : GetChildren()) {
-        if (auto ex = dynamic_cast<const Exit*>(child)) {
+        if (child->GetType() == EntityType::EXIT)
+        {
+            Exit* ex = static_cast<Exit*>(child);
             std::cout << "At the direction " << DirectionToString(ex->GetDirection())
                 << " you see an exit to " << ex->GetDestinationRoom()->name << "." << std::endl;
         }
@@ -24,7 +27,8 @@ void Room::Look() const
 
     //Get all the items
     std::vector<const Item*> items;
-    for (const auto& child : GetChildren()) {
+    items.reserve(all_children.size());
+    for (const auto& child : all_children) {
         if (auto item = dynamic_cast<const Item*>(child)) {
             items.push_back(item);
         }
@@ -40,14 +44,14 @@ void Room::Look() const
     //Get the monsters and display them
     for (const auto& child : GetChildren()) {
         if (auto monster = dynamic_cast<const Npc*>(child)) {
-            std::cout << "\nThere is a monster called '"<< monster->name <<"' in the room." << std::endl;
+            std::cout << "There is a monster called '"<< monster->name <<"' in the room." << std::endl;
 
         }
     }
     
 }
 
-const Exit* Room::GetExit(Direction direction) const
+Exit* Room::GetExit(Direction direction) const
 {
     if (direction == Direction::INVALID)
     {
@@ -57,7 +61,9 @@ const Exit* Room::GetExit(Direction direction) const
 
     //Search exits for appropiate direction
     for (const auto& child : GetChildren()) {
-        if (auto ex = dynamic_cast<const Exit*>(child)) {
+        if (child->GetType() == EntityType::EXIT)
+        {
+            Exit* ex = static_cast<Exit*>(child);
             if (ex->GetDirection() == direction)
             {
                 return ex;

@@ -7,8 +7,7 @@ class Player : public Creature
 {
 public:
 	Player(const char* name, const char* description, Room* room, Stats* stats);
-	virtual void Look() const;
-	virtual void Update();
+	void Look() const override;
 	void Move(const std::vector<std::string>& arguments);
 	void Take(const std::vector<std::string>& arguments);
 	void Drop(const std::vector<std::string>& arguments);
@@ -17,7 +16,9 @@ public:
 	void UnEquip(const std::vector<std::string>& arguments);
 	void Attack(const std::vector<std::string>& arguments);
 	void Unlock(const std::vector<std::string>& arguments);
+	void Detail(const std::vector<std::string>& arguments);
 	void Use(const std::vector<std::string>& arguments);
-	void Inventory();
+	void ShowInventory();
+	bool Die();
 
 };

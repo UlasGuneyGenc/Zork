@@ -1,6 +1,6 @@
 #pragma once
 
-enum BuffType
+enum class BuffType
 {
 	FIRE,
 	EARTH,
@@ -13,15 +13,15 @@ inline const char* BuffTypeToString(BuffType type)
 {
     switch (type)
     {
-    case FIRE:
+    case BuffType::FIRE:
         return "Fire";
-    case EARTH:
+    case BuffType::EARTH:
         return "Earth";
-    case WATER:
+    case BuffType::WATER:
         return "Water";
-    case AIR:
+    case BuffType::AIR:
         return "Air";
-    case NONE:
+    case BuffType::NONE:
         return "None";
     default:
         return "Invalid Buff Type";

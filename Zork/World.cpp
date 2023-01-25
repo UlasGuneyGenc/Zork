@@ -20,6 +20,11 @@ World::World()
 	Room* abandonedChurch = new Room("Abandoned Church", "Abandoned Church is a decaying, boarded-up structure. Pews overturned and altar is covered in dust and cobwebs. Scent of decay and neglect lingers in the air.");
 	Room* garden = new Room("Garden", "The Garden is overgrown and unkempt, with wilted flowers and tall weeds. Neglected, with a sense of ethereal beauty.");
 	Room* graveyard = new Room("Graveyard", "Graveyard is overgrown, with broken and knocked over gravestones. Air thick with sense of death and decay, eerie silence hangs over the area.");
+	Room* theLostCity = new Room("The Lost City", "An ancient, crumbling metropolis long abandoned by its inhabitants and overrun by wild beasts and dangerous magic.");
+	Room* theIronKeep = new Room("The Iron Keep", "A massive, impregnable fortress built to defend against invaders, its walls and gates made of solid iron.");
+	Room* crystalCaves = new Room("Crystal Caves", "A network of glittering, underground caves said to hold great treasures and powerful magic.");
+	Room* cursedSwamp = new Room("Cursed Swamp", "A murky, mist-shrouded bog rumored to be cursed by dark magic and home to deadly monsters.");
+	Room* dragonLair = new Room("Dragon's Lair", "A towering, ominous mountain range rumored to be home to fearsome dragons and other deadly creatures.");
 
 
 	// Create player
@@ -45,11 +50,27 @@ World::World()
 	Exit* exitGardenToChurch = new Exit("Broken door", "The exit from the garden leads back to the abandoned church.", Direction::SOUTH, garden, abandonedChurch, false, nullptr);
 	Exit* exitGardenToGraveyard = new Exit("Muddy broken wall", "The exit from the garden leads to a neglected graveyard.", Direction::WEST, garden, graveyard, false, nullptr);
 	Exit* exitGraveyardToGarden = new Exit("Muddy broken wall", "The exit from the graveyard leads to a small, overgrown garden.", Direction::EAST, graveyard, garden, false, nullptr);
+	Exit* exitGardenToIronKeep = new Exit("Iron gate", "A secret gate hidden by thorny bushes leads to the Iron Keep.", Direction::EAST, garden, theIronKeep, true, nullptr);
+	Exit* exitIronKeepToGarden = new Exit("Iron gate", "A secret gate hidden by thorny bushes leads to the garden.", Direction::WEST, theIronKeep, garden, false, nullptr);
+	Exit* exitGardenToLostCity = new Exit("Magical Entrance", "A hidden path that leads from garden to the ruins of the Lost City.", Direction::NORTH, garden, theLostCity, false, nullptr);
+	Exit* exitLostCityToGarden = new Exit("Magical Entrance", "A hidden path that leads from ruins of the Lost City to the garden.", Direction::SOUTH, theLostCity, garden, false, nullptr);
+	Exit* exitLostCityToCrystalCave = new Exit("Crystal Entrance", "A narrow and winding path that leads from the Lost City ruins to the Crystal Caves.", Direction::WEST, theLostCity, crystalCaves, true, nullptr);
+	Exit* exitCrystalCaveToLostCity= new Exit("Crystal Entrance", "A narrow and winding path that leads from Crystal Caves to the Lost City.", Direction::EAST, crystalCaves, theLostCity, false, nullptr);
+	Exit* exitCrystalCaveToCursedSwamp= new Exit("Cursed Exit", "A damp and dark path that leads from the Crystal Caves to the Cursed Swamp.", Direction::NORTH, crystalCaves, cursedSwamp, false, nullptr);
+	Exit* exitCursedSwampToCrystalCave = new Exit("Cursed Exit", "A damp and dark path that leads from the Cursed Swamp to the Crystal Caves.", Direction::SOUTH, cursedSwamp, crystalCaves, false, nullptr);
+	Exit* exitCursedSwampToDragonLair = new Exit("Dragon Path", "A narrow and winding path that leads from the Cursed Swamp to the Dragon's Lair.", Direction::EAST, cursedSwamp, dragonLair, true, nullptr);
+	Exit* exitDragonLairToCursedSwamp = new Exit("Cursed Exit", "A narrow and winding path that leads from the Dragon's Lair to the Cursed Swamp.", Direction::WEST, dragonLair, cursedSwamp, false, nullptr);
+
 
 	//rooms
 	entities.push_back(abandonedChurch);
 	entities.push_back(garden);
 	entities.push_back(graveyard);
+	entities.push_back(theLostCity);
+	entities.push_back(theIronKeep);
+	entities.push_back(crystalCaves);
+	entities.push_back(cursedSwamp);
+	entities.push_back(dragonLair);
 	//player
 	entities.push_back(player);
 	//storage items
@@ -67,15 +88,26 @@ World::World()
 	entities.push_back(exitGardenToChurch);
 	entities.push_back(exitGardenToGraveyard);
 	entities.push_back(exitGraveyardToGarden);
+	entities.push_back(exitGardenToIronKeep);
+	entities.push_back(exitIronKeepToGarden);
+	entities.push_back(exitGardenToLostCity);
+	entities.push_back(exitLostCityToGarden);
+	entities.push_back(exitLostCityToCrystalCave);
+	entities.push_back(exitCrystalCaveToLostCity);
+	entities.push_back(exitCrystalCaveToCursedSwamp);
+	entities.push_back(exitCursedSwampToCrystalCave);
+	entities.push_back(exitCursedSwampToDragonLair);
+	entities.push_back(exitDragonLairToCursedSwamp);
 	player->GetParent()->Look();
 
 }
 
 World::~World()
 {
-	while (!entities.empty())
-		delete entities.front(), entities.pop_front();
-	entities.clear();
+	for (Entity* entity : entities)
+	{
+		delete entity;
+	}
 }
 
 void World::HandleInput(const std::vector<std::string>& arguments)
@@ -86,19 +118,21 @@ void World::HandleInput(const std::vector<std::string>& arguments)
 		break;
 	case 1:
 		if (arguments[0] == "exit" || arguments[0] == "quit" || arguments[0] == "q") {
-			gameOver = true;
+			player->Die();
 		}
 		else if (arguments[0] == "look" || arguments[0] == "info") {
 			player->Look();
 		}
 		else if (arguments[0] == "bag" || arguments[0] == "inventory" || arguments[0] == "b" || arguments[0] == "i") {
-			player->Inventory();
+			player->ShowInventory();
 		}
 		else if (arguments[0] == "stats" || arguments[0] == "stat") {
 			player->GetInfo();
 		}
-		else
+		else 
+		{
 			std::cout << "I did not understand you!" << std::endl;
+		}
 		break;
 	case 2:
 		if (arguments[0] == "move" || arguments[0] == "go") {
@@ -115,6 +149,10 @@ void World::HandleInput(const std::vector<std::string>& arguments)
 		else if (arguments[0] == "examine" || arguments[0] == "info" || arguments[0] == "look")
 		{
 			player->Examine(arguments);
+		}
+		else if (arguments[0] == "detail" )
+		{
+			player->Detail(arguments);
 		}
 		else if (arguments[0] == "equip" || arguments[0] == "eq")
 		{
@@ -138,13 +176,14 @@ void World::HandleInput(const std::vector<std::string>& arguments)
 		}
 		//TO DO
 		break;
-	case 3:
-		//TO DO
-		break;
 	case 4:
 		if ((arguments[0] == "take" || arguments[0] == "get") && arguments[2] == "from")
 		{
 			player->Take(arguments);
+		}
+		else
+		{
+			std::cout << "I did not understand you!" << std::endl;
 		}
 		break;
 	default:
@@ -153,9 +192,8 @@ void World::HandleInput(const std::vector<std::string>& arguments)
 	}
 }
 
-bool World::IsGameOver()
+bool World::IsGameOver() const
 {
-	gameOver = !(player->IsAlive());
-	return gameOver;
+	return !(player->IsAlive());
 }
 

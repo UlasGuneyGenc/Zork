@@ -1,6 +1,6 @@
 #pragma once
 
-enum Direction
+enum class Direction
 {
 	NORTH,
 	EAST,
@@ -9,7 +9,7 @@ enum Direction
     INVALID
 };
 
-inline const char* DirectionToString(const Direction dir)
+inline const char* DirectionToString(Direction dir)
 {
     switch (dir)
     {
