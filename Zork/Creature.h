@@ -4,7 +4,7 @@
 #include "Item.h"
 #include "BuffType.h"
 #include "Stats.h"
-
+#include <vector>
 class Creature : public Entity
 {
 public:
@@ -13,7 +13,12 @@ public:
 	virtual void Update();
 	virtual const EntityType GetType() const;
 	virtual void GetInfo() const;
+	virtual void Attack(const std::vector<std::string>& arguments);
+	virtual void MakeAttack();
+	virtual void ProcessDamage(int damage);
 	void CalculateStat();
+	const int GetDamageCount(const Creature* targetEnemy) const;
+	bool IsAlive() const;
 
 protected:
 	Item* buffItem;
@@ -21,4 +26,7 @@ protected:
 	Item* armor;
 	Stats* stats;
 	int currentHealth;
+	Creature* combatTarget;
+	bool isPlayerTurn;
+
 };

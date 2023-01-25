@@ -34,7 +34,7 @@ void Player::Take(const std::vector<std::string>& arguments)
 	switch (arguments.size()) {
 	case 2:
 	{
-		Item* item = (Item*)(GetParent()->Find(arguments[1]),EntityType::ITEM);
+		Item* item = (Item*)(GetParent()->Find(arguments[1], EntityType::ITEM));
 		if (item == nullptr)
 		{
 			std::cout << "There is no item named '" << arguments[1] << "' in the current room." << std::endl;
@@ -46,7 +46,7 @@ void Player::Take(const std::vector<std::string>& arguments)
 	}
 	case 4:
 	{
-		Entity* entity = (Item*)(GetParent()->Find(arguments[3]), EntityType::ITEM);
+		Entity* entity = (Item*)(GetParent()->Find(arguments[3], EntityType::ITEM));
 		if (entity == nullptr)
 		{
 			std::cout << "There is no such thing as '" << arguments[1] << "'" << std::endl;
@@ -234,17 +234,9 @@ void Player::UnEquip(const std::vector<std::string>& arguments)
 	}
 }
 
-const Npc* Player::GetMonsterFromRoom() const
+void Player::Attack(const std::vector<std::string>& arguments)
 {
-	Npc* enemy = nullptr;
-
-	// Search for enemy in the room
-	for (const auto& child : GetChildren()) {
-		if (auto ex = dynamic_cast<const Npc*>(child)) {
-			enemy = (Npc*)ex;
-		}
-	}
-	return enemy;
+	Creature::Attack(arguments);
 }
 
 void Player::Inventory()

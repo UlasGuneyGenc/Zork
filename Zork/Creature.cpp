@@ -1,6 +1,8 @@
 #include "Creature.h"
 #include <iostream>
 #include <map>
+#include "Npc.h"
+#include <thread>
 
 Creature::Creature(const char* name, const char* description, Room* room, Stats* stats) : Entity(name, description, (Entity*)room)
 {
@@ -39,6 +41,74 @@ void Creature::GetInfo() const
     }
 }
 
+void Creature::Attack(const std::vector<std::string>& arguments)
+{
+    Npc* enemy = nullptr;
+
+    // Search for enemy in the room
+    for (const auto& child : GetRoom()->GetChildren()) {
+        if (auto ex = dynamic_cast<const Npc*>(child)) {
+            enemy = (Npc*)ex;
+        }
+    }
+    if (enemy == nullptr) {
+        std::cout << "There is nothing to attack!" << std::endl;
+        return;
+    }
+    combatTarget = enemy;
+    enemy->combatTarget = this;
+    while (this->IsAlive() && enemy->IsAlive()) {
+        if (!enemy->IsAlive()) {
+            std::cout << "You won the battle" << std::endl;
+            return;
+        }
+        MakeAttack();
+        if (!enemy->IsAlive()) {
+            std::cout << "You won the battle" << std::endl;
+            return;
+        }
+        enemy->MakeAttack();
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        if (!this->IsAlive()) {
+            std::cout << "You lost the battle" << std::endl;
+            return;
+        }
+    }
+    std::cout << "'" << enemy->name << "' is already dead!" << std::endl;
+
+}
+
+void Creature::MakeAttack()
+{
+    if (combatTarget == nullptr)
+    {
+        return;
+    }
+
+    if (!combatTarget->IsAlive())
+    {
+        std::cout << combatTarget->name << " is dead." << std::endl;
+        combatTarget = nullptr;
+        return;
+    }
+
+    if (this->combatTarget == nullptr) {
+        std::cout << "There is nothing to attack!" << std::endl;
+        return;
+    }
+    int damage = GetDamageCount(combatTarget);
+    combatTarget->ProcessDamage(damage);
+    std::cout << std::endl << "'" << name << "' hit " << damage << " to '" << combatTarget->name << "' HP: " << combatTarget->currentHealth << "/" << combatTarget->stats->getHealth() << std::endl;
+    if (combatTarget->stats->getHealth() <= 0) {
+        std::cout << combatTarget->name << " is dead." << std::endl;
+    }
+}
+
+void Creature::ProcessDamage(int damage) 
+{
+    currentHealth -= damage;
+}
+
 void Creature::CalculateStat()
 {
     int previous_damage = stats->getHealth() - currentHealth;
@@ -75,5 +145,16 @@ void Creature::CalculateStat()
     int new_max_health = stats->getHealth();
     currentHealth = previous_damage == 0 ? new_max_health : new_max_health - previous_damage;
 
+}
+
+const int Creature::GetDamageCount(const Creature* targetEnemy) const
+{
+    int random_number = rand() % 21 - 10; // generates a random number between -10 and 10
+    return stats->getAttack() - (stats->getAttack() * targetEnemy->stats->getDefence() / 100) + random_number;
+}
+
+bool Creature::IsAlive() const
+{
+    return currentHealth>0;
 }
 

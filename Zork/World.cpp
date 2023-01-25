@@ -43,7 +43,7 @@ World::World()
 	Item* sword = new Item("Sword", "Tiny rusty metal sword.", smallChest, ItemType::WEAPON, BuffType::NONE, Stats(5,20,5));
 
 	//Create enemies in rooms
-	Npc* zga = new Npc("Zga", "You see a giant creature who repeatedly whispers, 'Zga, Zga, Zga'. It seems to be an ancient language. Be careful!", abandonedChurch, BuffType::NONE, new Stats(200, 40, 40));
+	Npc* zga = new Npc("Zga", "You see a giant creature who repeatedly whispers, 'Zga, Zga, Zga'. It seems to be an ancient language. Be careful!", abandonedChurch, BuffType::NONE, new Stats(60, 20, 60));
 
 
 	entities.push_back(abandonedChurch);
@@ -110,6 +110,10 @@ void World::HandleInput(const std::vector<std::string>& arguments)
 		else if (arguments[0] == "unequip")
 		{
 			player->UnEquip(arguments);
+		}
+		else if (arguments[0] == "attack")
+		{
+			player->Attack(arguments);
 		}
 		//TO DO
 		break;

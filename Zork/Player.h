@@ -15,7 +15,7 @@ public:
 	void Examine(const std::vector<std::string>& arguments);
 	void Equip(const std::vector<std::string>& arguments);
 	void UnEquip(const std::vector<std::string>& arguments);
-	const Npc* GetMonsterFromRoom() const;
+	void Attack(const std::vector<std::string>& arguments);
 	void Inventory();
 
 };
