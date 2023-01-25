@@ -7,7 +7,8 @@ enum ItemType
 	WEAPON,
 	ARMOR,
     STORAGE,
-    BUFF
+    BUFF,
+    POTION
     
 };
 
@@ -25,6 +26,8 @@ inline const char* ItemTypeToString(const ItemType itemType)
         return "Storage";
     case ItemType::BUFF:
         return "Buff";
+    case ItemType::POTION:
+        return "Potion";
     default:
         return "None";
     }

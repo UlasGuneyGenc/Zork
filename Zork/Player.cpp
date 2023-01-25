@@ -211,7 +211,7 @@ void Player::UnEquip(const std::vector<std::string>& arguments)
 
 	if (!entity)
 	{
-		std::cout << "There is no equipped thing as '" << arguments[1] << "' on you!" << std::endl;
+		std::cout << "There is no equipped thing '" << arguments[1] << "' on you!" << std::endl;
 		return;
 	}
 	Item* item = (Item*)entity;
@@ -270,6 +270,27 @@ void Player::Unlock(const std::vector<std::string>& arguments)
 		}
 	}
 
+}
+
+void Player::Use(const std::vector<std::string>& arguments)
+{
+	Entity* entity = Find(arguments[1], EntityType::ITEM);
+
+	if (!entity)
+	{
+		std::cout << "There is no such thing as '" << arguments[1] << "' to use!" << std::endl;
+		return;
+	}
+	Item* item = (Item*)entity;
+
+	if (item->GetItemType() == ItemType::POTION)
+	{
+		int random_number = rand() % 21 - 10; // generates a random number between -10 and 10
+		currentHealth = std::min(currentHealth + random_number + item->GetStats().getHealth(), stats->getHealth());
+		std::cout << "You replenished your health. HP: " << currentHealth<< "/"<< stats->getHealth() << std::endl;
+		delete item;
+		item = nullptr;
+	}
 }
 
 void Player::Inventory()

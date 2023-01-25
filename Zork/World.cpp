@@ -38,6 +38,7 @@ World::World()
 	Item* rustyKey = new Item("Key", "Rusty Iron key, small and worn, covered in rust, teeth still sharp.", zga, ItemType::KEY, BuffType::NONE, Stats());
 	Item* fireBuff = new Item("FireScroll", "A magical scroll that warms your heart even at the sight of it.", smallChest, ItemType::BUFF, BuffType::FIRE, Stats());
 	Item* sword = new Item("Sword", "Tiny rusty metal sword.", smallChest, ItemType::WEAPON, BuffType::NONE, Stats(5,20,5));
+	Item* potionOne = new Item("Potion", "Heals the drinker and replenishes any lost health", zga, ItemType::POTION, BuffType::NONE, Stats(50, 0, 0));
 
 	// Create exits
 	Exit* exitChurchToGarden = new Exit("Broken door", "The exit from the church leads to a small, overgrown garden.", Direction::NORTH, abandonedChurch, garden, true, rustyKey);
@@ -45,11 +46,23 @@ World::World()
 	Exit* exitGardenToGraveyard = new Exit("Muddy broken wall", "The exit from the garden leads to a neglected graveyard.", Direction::WEST, garden, graveyard, false, nullptr);
 	Exit* exitGraveyardToGarden = new Exit("Muddy broken wall", "The exit from the graveyard leads to a small, overgrown garden.", Direction::EAST, graveyard, garden, false, nullptr);
 
-
+	//rooms
 	entities.push_back(abandonedChurch);
 	entities.push_back(garden);
 	entities.push_back(graveyard);
+	//player
 	entities.push_back(player);
+	//storage items
+	entities.push_back(smallChest);
+	entities.push_back(bag);
+	//monsters
+	entities.push_back(zga);
+	//items
+	entities.push_back(rustyKey);
+	entities.push_back(fireBuff);
+	entities.push_back(sword);
+	entities.push_back(potionOne);
+	//exits
 	entities.push_back(exitChurchToGarden);
 	entities.push_back(exitGardenToChurch);
 	entities.push_back(exitGardenToGraveyard);
@@ -118,6 +131,10 @@ void World::HandleInput(const std::vector<std::string>& arguments)
 		else if (arguments[0] == "unlock")
 		{
 			player->Unlock(arguments);
+		}
+		else if (arguments[0] == "use")
+		{
+			player->Use(arguments);
 		}
 		//TO DO
 		break;
