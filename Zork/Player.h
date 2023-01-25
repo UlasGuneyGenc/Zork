@@ -16,6 +16,7 @@ public:
 	void Equip(const std::vector<std::string>& arguments);
 	void UnEquip(const std::vector<std::string>& arguments);
 	void Attack(const std::vector<std::string>& arguments);
+	void Unlock(const std::vector<std::string>& arguments);
 	void Inventory();
 
 };

@@ -26,12 +26,7 @@ World::World()
 	Player* player = new Player("Hero", "Mighty hero!", abandonedChurch, new Stats(40,40,40));
 	this->player = player;
 
-	// Create exits
-	Exit* exitChurchToGarden = new Exit("Broken door", "The exit from the church leads to a small, overgrown garden.", Direction::NORTH, abandonedChurch, garden);
-	Exit* exitGardenToChurch = new Exit("Broken door", "The exit from the garden leads back to the abandoned church.", Direction::SOUTH, garden, abandonedChurch);
-	Exit* exitGardenToGraveyard = new Exit("Muddy broken wall", "The exit from the garden leads to a neglected graveyard.", Direction::WEST, garden, graveyard);
-	Exit* exitGraveyardToGarden = new Exit("Muddy broken wall", "The exit from the graveyard leads to a small, overgrown garden.", Direction::EAST, graveyard, garden);
-
+	
 	//Create storage items
 	Item* smallChest = new Item("Chest", "Small wooden chest is worn and weathered, crafted from rough-hewn planks of wood. Iron hinges and lock rusted with age, giving off a sense of mystery.", abandonedChurch, ItemType::STORAGE, BuffType::NONE, Stats());
 	Item* bag = new Item("Bag", "Bag.", garden, ItemType::STORAGE, BuffType::NONE, Stats());
@@ -44,7 +39,12 @@ World::World()
 	Item* fireBuff = new Item("FireScroll", "A magical scroll that warms your heart even at the sight of it.", smallChest, ItemType::BUFF, BuffType::FIRE, Stats());
 	Item* sword = new Item("Sword", "Tiny rusty metal sword.", smallChest, ItemType::WEAPON, BuffType::NONE, Stats(5,20,5));
 
-	
+	// Create exits
+	Exit* exitChurchToGarden = new Exit("Broken door", "The exit from the church leads to a small, overgrown garden.", Direction::NORTH, abandonedChurch, garden, true, rustyKey);
+	Exit* exitGardenToChurch = new Exit("Broken door", "The exit from the garden leads back to the abandoned church.", Direction::SOUTH, garden, abandonedChurch, false, nullptr);
+	Exit* exitGardenToGraveyard = new Exit("Muddy broken wall", "The exit from the garden leads to a neglected graveyard.", Direction::WEST, garden, graveyard, false, nullptr);
+	Exit* exitGraveyardToGarden = new Exit("Muddy broken wall", "The exit from the graveyard leads to a small, overgrown garden.", Direction::EAST, graveyard, garden, false, nullptr);
+
 
 	entities.push_back(abandonedChurch);
 	entities.push_back(garden);
@@ -114,6 +114,10 @@ void World::HandleInput(const std::vector<std::string>& arguments)
 		else if (arguments[0] == "attack")
 		{
 			player->Attack(arguments);
+		}
+		else if (arguments[0] == "unlock")
+		{
+			player->Unlock(arguments);
 		}
 		//TO DO
 		break;

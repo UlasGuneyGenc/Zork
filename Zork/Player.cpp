@@ -22,10 +22,13 @@ void Player::Update()
 void Player::Move(const std::vector<std::string>& arguments)
 {
 	const Exit* wantedExit = GetRoom()->GetExit(StringToDirection(arguments[1]));
-	if (wantedExit != NULL)
+	if (wantedExit && !wantedExit->locked)
 	{
 		ChangeParent((Entity*)wantedExit->GetDestinationRoom());
 		GetParent()->Look();
+	}
+	else if (wantedExit && wantedExit->locked) {
+		std::cout << "Exit is locked." << std::endl;
 	}
 }
 
@@ -237,6 +240,35 @@ void Player::UnEquip(const std::vector<std::string>& arguments)
 void Player::Attack(const std::vector<std::string>& arguments)
 {
 	Creature::Attack(arguments);
+}
+
+void Player::Unlock(const std::vector<std::string>& arguments)
+{
+	const Exit* wantedExit = GetRoom()->GetExit(StringToDirection(arguments[1]));
+
+	//check if exit exists and it is locked
+	if (wantedExit)
+	{
+		if (!wantedExit->locked)
+		{
+			std::cout << "Exit is not locked you don't need to unlock it!"<< std::endl;
+		}
+		else
+		{
+			const Item* key = wantedExit->GetKey();
+
+			//check if we have the key
+			Item* keyOnPlayer = (Item*)Find(key->name);
+			
+			if (keyOnPlayer)
+			{
+				wantedExit->Unlock();
+				std::cout << DirectionToString(wantedExit->GetDirection()) <<" exit is unlocked!" << std::endl;
+			}
+
+		}
+	}
+
 }
 
 void Player::Inventory()

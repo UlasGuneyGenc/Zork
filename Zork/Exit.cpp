@@ -2,13 +2,14 @@
 #include "Room.h"
 #include <iostream>
 
-Exit::Exit(const char* name, const char* description, Direction direction, Room* origin, Room* destination)
+Exit::Exit(const char* name, const char* description, Direction direction, Room* origin, Room* destination, bool locked, Item* key)
 	: Entity(name, description, (Entity*) origin )
 {
 	this->direction = direction;
 	this->origin = origin;
 	this->destination = destination;
-	locked = true;
+	this->locked = locked;
+	this->key = key;
 }
 
 const EntityType Exit::GetType() const
@@ -26,7 +27,14 @@ const Room* Exit::GetDestinationRoom() const
 	return destination;
 }
 
-void Exit::Look() const
+const Item* Exit::GetKey() const
 {
-	std::cout << (locked ? "Exit is locked. " : "It leads to ") << destination->name << ". " << description << std::endl;
+	return key;
 }
+
+const void Exit::Unlock() const
+{
+	locked = false;
+}
+
+
