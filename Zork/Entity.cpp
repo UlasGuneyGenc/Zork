@@ -1,6 +1,6 @@
-#include "Entity.h"
 #include <iostream>
 #include "Helpers.h"
+#include "Entity.h"
 
 Entity::Entity(const char* name, const char* description, Entity* parent) : name(name), description(description), parent(parent)
 {
@@ -14,10 +14,6 @@ Entity::Entity(const char* name, const char* description, Entity* parent) : name
 void Entity::Look() const
 {
 	std::cout << name << std::endl << description << std::endl;
-}
-
-void Entity::Update()
-{
 }
 
 const EntityType Entity::GetType() const

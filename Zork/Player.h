@@ -1,6 +1,6 @@
 #pragma once
-#include "Creature.h"
 #include <vector>
+#include "Creature.h"
 #include "Npc.h"
 
 class Player : public Creature
@@ -14,7 +14,7 @@ public:
 	void Examine(const std::vector<std::string>& arguments);
 	void Equip(const std::vector<std::string>& arguments);
 	void UnEquip(const std::vector<std::string>& arguments);
-	void Attack(const std::vector<std::string>& arguments);
+	void Attack(const std::vector<std::string>& arguments) override;
 	void Unlock(const std::vector<std::string>& arguments);
 	void Detail(const std::vector<std::string>& arguments);
 	void Use(const std::vector<std::string>& arguments);

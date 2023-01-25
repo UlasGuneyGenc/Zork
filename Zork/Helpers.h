@@ -1,10 +1,10 @@
 #pragma once
-#include "Direction.h"
 #include <string>
 #include <vector>
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include "Direction.h"
 
 inline std::vector<std::string> GetVerbs(const std::string& input)
 {

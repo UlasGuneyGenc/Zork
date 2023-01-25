@@ -1,9 +1,9 @@
+#include <iostream>
+#include <vector>
 #include "Room.h"
 #include "Exit.h"
 #include "Direction.h"
-#include <iostream>
 #include "Item.h"
-#include <vector>
 #include "Npc.h"
 
 Room::Room(const char* name, const char* description) : Entity(name, description, NULL)
@@ -13,42 +13,30 @@ Room::Room(const char* name, const char* description) : Entity(name, description
 void Room::Look() const
 {
     std::cout << "You are in " << name << ". " << description << std::endl << std::endl;
-    const std::list<Entity*>& all_children = GetChildren();
-
-    //Get all exits and print them
-    for (const auto& child : GetChildren()) {
-        if (child->GetType() == EntityType::EXIT)
-        {
-            Exit* ex = static_cast<Exit*>(child);
-            std::cout << "At the direction " << DirectionToString(ex->GetDirection())
-                << " you see an exit to " << ex->GetDestinationRoom()->name << "." << std::endl;
-        }
-    }
-
-    //Get all the items
+    const std::list<Entity*>& allChildren = GetChildren();
     std::vector<const Item*> items;
-    items.reserve(all_children.size());
-    for (const auto& child : all_children) {
-        if (auto item = dynamic_cast<const Item*>(child)) {
-            items.push_back(item);
+    items.reserve(allChildren.size());
+
+    for (const auto& child : allChildren) {
+        switch (child->GetType()) {
+        case EntityType::EXIT:
+            std::cout << "At the direction " << DirectionToString(static_cast<Exit*>(child)->GetDirection())
+                << " you see an exit to " << static_cast<Exit*>(child)->GetDestinationRoom()->name << "." << std::endl;
+            break;
+        case EntityType::ITEM:
+            items.push_back(static_cast<Item*>(child));
+            break;
+        case EntityType::NPC:
+            std::cout << "There is a monster called '" << child->name << "' in the room." << std::endl << std::endl;
+            break;
         }
     }
-    //Print the items if there are any
     if (!items.empty()) {
         std::cout << "\nThere are following items in the room:" << std::endl;
         for (const auto& item : items) {
             std::cout << item->name << std::endl;
         }
     }
-
-    //Get the monsters and display them
-    for (const auto& child : GetChildren()) {
-        if (auto monster = dynamic_cast<const Npc*>(child)) {
-            std::cout << "There is a monster called '"<< monster->name <<"' in the room." << std::endl;
-
-        }
-    }
-    
 }
 
 Exit* Room::GetExit(Direction direction) const

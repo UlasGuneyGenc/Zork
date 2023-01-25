@@ -9,13 +9,12 @@ public:
 	Entity(const char* name, const char* description, Entity* parent);
 
 	virtual void Look() const;
-	virtual void Update();
 	virtual const EntityType GetType() const;
 	virtual Entity* GetParent() const;
-	virtual const void ChangeParent(Entity* newParent);
+	const void ChangeParent(Entity* newParent);
 	const std::list<Entity*>& GetChildren() const;
-	virtual void AddChild(Entity* child);
-	virtual void RemoveChild(Entity* child);
+	void AddChild(Entity* child);
+	void RemoveChild(Entity* child);
 	Entity* Find(const std::string& name, EntityType type) const;
 	Entity* Find(const std::string& childName) const;
 

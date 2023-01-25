@@ -1,7 +1,7 @@
+#include <iostream>
 #include "Player.h"
 #include "Exit.h"
 #include "Direction.h"
-#include <iostream>
 #include "Item.h"
 #include "Stats.h"
 #include "Room.h"
@@ -128,15 +128,17 @@ void Player::Examine(const std::vector<std::string>& arguments)
 	//If there is something like that check it if it's an item,creature etc
 	if (entity->GetType() == EntityType::ITEM) {
 		Item* targetItem = (Item*)entity;
+		const std::list<Entity*>& children = targetItem->GetChildren();
 		std::cout << std::endl << "Name: " << targetItem->name << std::endl;
 		std::cout << "Description: " << targetItem->description << std::endl;
 		std::cout << "Buff type: " << BuffTypeToString(targetItem->GetBuffType()) << std::endl;
 
 		//Get all the items
 		std::vector<const Item*> itemsInStorage;
-		for (const auto& child : targetItem->GetChildren()) {
-			if (auto childItem = dynamic_cast<const Item*>(child)) {
-				itemsInStorage.push_back(childItem);
+		for (const auto& child : children) {
+			if (child->GetType() == EntityType::ITEM)
+			{
+				itemsInStorage.push_back(static_cast<Item*>(child));
 			}
 		}
 
@@ -302,10 +304,14 @@ void Player::Use(const std::vector<std::string>& arguments)
 
 void Player::ShowInventory()
 {
+	const std::list<Entity*>& children = GetChildren();
 	std::vector<Item*> itemsInBag;
-	for (const auto& child : GetChildren()) {
-		if (auto childItem = dynamic_cast<Item*>(child)) {
-			itemsInBag.push_back(childItem);
+	itemsInBag.reserve(children.size());
+
+	for (const auto& child : children) {
+		if (child->GetType() == EntityType::ITEM)
+		{
+			itemsInBag.push_back(static_cast<Item*>(child));
 		}
 	}
 
@@ -320,7 +326,6 @@ void Player::ShowInventory()
 	{
 		std::cout << "There is nothing in your inventory." << std::endl;
 	}
-
 }
 
 bool Player::Die()

@@ -1,9 +1,9 @@
-#include "Creature.h"
 #include <iostream>
 #include <map>
-#include "Npc.h"
 #include <thread>
 #include "Room.h"
+#include "Creature.h"
+#include "Npc.h"
 
 Creature::Creature(const char* name, const char* description, Room* room, Stats* stats) : Entity(name, description, (Entity*)room)
 {
@@ -18,11 +18,6 @@ Room* Creature::GetRoom() const
 		return static_cast<Room*>(GetParent());
 	}
 	return nullptr;
-}
-
-void Creature::Update()
-{
-
 }
 
 const EntityType Creature::GetType() const
@@ -45,11 +40,13 @@ void Creature::GetInfo() const
 void Creature::Attack(const std::vector<std::string>& arguments)
 {
     Npc* enemy = nullptr;
+    const std::list<Entity*>& roomChildren = GetRoom()->GetChildren();
 
     // Search for enemy in the room
-    for (const auto& child : GetRoom()->GetChildren()) {
-        if (auto ex = dynamic_cast<const Npc*>(child)) {
-            enemy = (Npc*)ex;
+    for (const auto& child : roomChildren) {
+        if (child->GetType() == EntityType::NPC)
+        {
+            enemy = (Npc*)child;
         }
     }
     if (enemy == nullptr) {
@@ -80,7 +77,6 @@ void Creature::Attack(const std::vector<std::string>& arguments)
         }
     }
     std::cout << "'" << enemy->name << "' is already dead!" << std::endl;
-
 }
 
 void Creature::MakeAttack()
@@ -116,11 +112,14 @@ void Creature::ProcessDamage(int damage)
 
 void Creature::DropAllItems()
 {
+    const std::list<Entity*>& children = GetChildren();
+
     //Get all the items that creature has
     std::vector<Item*> itemsInBag;
-    for (const auto& child : GetChildren()) {
-        if (auto childItem = dynamic_cast<Item*>(child)) {
-            itemsInBag.push_back(childItem);
+    for (const auto& child : children) {
+        if (child->GetType() == EntityType::ITEM)
+        {
+            itemsInBag.push_back(static_cast<Item*>(child));
         }
     }
     if (!itemsInBag.empty()) {

@@ -1,9 +1,9 @@
 #include <iostream>
+#include <list>
 #include "World.h"
 #include "Room.h"
 #include "Player.h"
 #include "Exit.h"
-#include <list>
 #include "Item.h"
 #include "Stats.h"
 

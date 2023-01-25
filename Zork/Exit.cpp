@@ -1,6 +1,6 @@
+#include <iostream>
 #include "Exit.h"
 #include "Room.h"
-#include <iostream>
 
 Exit::Exit(const char* name, const char* description, Direction direction, Room* origin, Room* destination, bool locked, Item* key)
 	: Entity(name, description, (Entity*) origin )
