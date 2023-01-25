@@ -16,6 +16,7 @@ public:
 	virtual void Attack(const std::vector<std::string>& arguments);
 	virtual void MakeAttack();
 	virtual void ProcessDamage(int damage);
+	virtual void DropAllItems();
 	void CalculateStat();
 	const int GetDamageCount(const Creature* targetEnemy) const;
 	bool IsAlive() const;

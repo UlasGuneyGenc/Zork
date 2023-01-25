@@ -60,17 +60,21 @@ void Creature::Attack(const std::vector<std::string>& arguments)
     while (this->IsAlive() && enemy->IsAlive()) {
         if (!enemy->IsAlive()) {
             std::cout << "You won the battle" << std::endl;
+            combatTarget->DropAllItems();
             return;
         }
         MakeAttack();
         if (!enemy->IsAlive()) {
             std::cout << "You won the battle" << std::endl;
+            combatTarget->DropAllItems();
             return;
         }
         enemy->MakeAttack();
+        std::cout << std::endl;
         std::this_thread::sleep_for(std::chrono::seconds(1));
         if (!this->IsAlive()) {
             std::cout << "You lost the battle" << std::endl;
+            DropAllItems();
             return;
         }
     }
@@ -98,7 +102,7 @@ void Creature::MakeAttack()
     }
     int damage = GetDamageCount(combatTarget);
     combatTarget->ProcessDamage(damage);
-    std::cout << std::endl << "'" << name << "' hit " << damage << " to '" << combatTarget->name << "' HP: " << combatTarget->currentHealth << "/" << combatTarget->stats->getHealth() << std::endl;
+    std::cout << "'" << name << "' hit " << damage << " to '" << combatTarget->name << "' HP: " << combatTarget->currentHealth << "/" << combatTarget->stats->getHealth() << std::endl;
     if (combatTarget->stats->getHealth() <= 0) {
         std::cout << combatTarget->name << " is dead." << std::endl;
     }
@@ -107,6 +111,24 @@ void Creature::MakeAttack()
 void Creature::ProcessDamage(int damage) 
 {
     currentHealth -= damage;
+}
+
+void Creature::DropAllItems()
+{
+    //Get all the items that creature has
+    std::vector<Item*> itemsInBag;
+    for (const auto& child : GetChildren()) {
+        if (auto childItem = dynamic_cast<Item*>(child)) {
+            itemsInBag.push_back(childItem);
+        }
+    }
+    if (!itemsInBag.empty()) {
+        std::cout <<"'"<<name<<"' dropped following items:" << std::endl;
+        for (const auto& item : itemsInBag) {
+            item->ChangeParent((Entity*)GetRoom());
+            std::cout << "- " << item->name << std::endl;
+        }
+    }
 }
 
 void Creature::CalculateStat()

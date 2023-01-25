@@ -36,15 +36,15 @@ World::World()
 	Item* smallChest = new Item("Chest", "Small wooden chest is worn and weathered, crafted from rough-hewn planks of wood. Iron hinges and lock rusted with age, giving off a sense of mystery.", abandonedChurch, ItemType::STORAGE, BuffType::NONE, Stats());
 	Item* bag = new Item("Bag", "Bag.", garden, ItemType::STORAGE, BuffType::NONE, Stats());
 
-
-	//Create items in the storages
-	Item* rustyKey = new Item("Key", "Rusty Iron key, small and worn, covered in rust, teeth still sharp.", smallChest, ItemType::KEY, BuffType::NONE, Stats());
-	Item* fireBuff = new Item("FireScroll", "A magical scroll that warms your heart even at the sight of it.", smallChest, ItemType::BUFF, BuffType::FIRE, Stats());
-	Item* sword = new Item("Sword", "Tiny rusty metal sword.", smallChest, ItemType::WEAPON, BuffType::NONE, Stats(5,20,5));
-
 	//Create enemies in rooms
 	Npc* zga = new Npc("Zga", "You see a giant creature who repeatedly whispers, 'Zga, Zga, Zga'. It seems to be an ancient language. Be careful!", abandonedChurch, BuffType::NONE, new Stats(60, 20, 60));
 
+	//Create items 
+	Item* rustyKey = new Item("Key", "Rusty Iron key, small and worn, covered in rust, teeth still sharp.", zga, ItemType::KEY, BuffType::NONE, Stats());
+	Item* fireBuff = new Item("FireScroll", "A magical scroll that warms your heart even at the sight of it.", smallChest, ItemType::BUFF, BuffType::FIRE, Stats());
+	Item* sword = new Item("Sword", "Tiny rusty metal sword.", smallChest, ItemType::WEAPON, BuffType::NONE, Stats(5,20,5));
+
+	
 
 	entities.push_back(abandonedChurch);
 	entities.push_back(garden);
@@ -132,8 +132,9 @@ void World::HandleInput(const std::vector<std::string>& arguments)
 	}
 }
 
-bool World::IsGameOver() const
+bool World::IsGameOver()
 {
+	gameOver = !(player->IsAlive());
 	return gameOver;
 }
 

@@ -12,10 +12,10 @@ public:
 	World();
 	~World();
 	void HandleInput(const std::vector<std::string>& words);
-	bool IsGameOver() const;
+	bool IsGameOver();
 
 private:
 	Player* player;
 	std::list<Entity*> entities;
-	bool gameOver = false;
+	bool gameOver ;
 };

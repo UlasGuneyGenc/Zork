@@ -241,16 +241,16 @@ void Player::Attack(const std::vector<std::string>& arguments)
 
 void Player::Inventory()
 {
-	std::vector<const Item*> itemsInBag;
+	std::vector<Item*> itemsInBag;
 	for (const auto& child : GetChildren()) {
-		if (auto childItem = dynamic_cast<const Item*>(child)) {
+		if (auto childItem = dynamic_cast<Item*>(child)) {
 			itemsInBag.push_back(childItem);
 		}
 	}
 
 	//Print the items that we have if there are any
 	if (!itemsInBag.empty()) {
-		std::cout << "\nThere are following items in the inventory:" << std::endl;
+		std::cout << std::endl << "There are following items in the inventory:" << std::endl;
 		for (const auto& item : itemsInBag) {
 			std::cout << "- " << item->name << std::endl;
 		}
