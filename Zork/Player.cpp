@@ -263,6 +263,7 @@ void Player::Unlock(const std::vector<std::string>& arguments)
 			if (keyOnPlayer)
 			{
 				wantedExit->Unlock();
+				keyOnPlayer->ChangeParent((Entity*)wantedExit);
 				std::cout << DirectionToString(wantedExit->GetDirection()) <<" exit is unlocked!" << std::endl;
 			}
 
