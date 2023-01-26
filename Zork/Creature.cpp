@@ -41,7 +41,6 @@ void Creature::Attack(const std::vector<std::string>& arguments)
 {
     Npc* enemy = nullptr;
     const std::list<Entity*>& roomChildren = GetRoom()->GetChildren();
-
     // Search for enemy in the room
     for (const auto& child : roomChildren) {
         if (child->GetType() == EntityType::NPC)
@@ -54,6 +53,8 @@ void Creature::Attack(const std::vector<std::string>& arguments)
         return;
     }
     combatTarget = enemy;
+    const bool isLastBoss = enemy->GetIsLastBoss();
+
     enemy->combatTarget = this;
     while (this->IsAlive() && enemy->IsAlive()) {
         if (!enemy->IsAlive()) {
@@ -65,6 +66,11 @@ void Creature::Attack(const std::vector<std::string>& arguments)
         if (!enemy->IsAlive()) {
             std::cout << "You won the battle" << std::endl;
             combatTarget->DropAllItems();
+            if (isLastBoss)
+            {
+                std::cout << "Congratulations! You beat the game!" << std::endl;
+                Die();
+            }
             return;
         }
         enemy->MakeAttack();
@@ -72,7 +78,6 @@ void Creature::Attack(const std::vector<std::string>& arguments)
         std::this_thread::sleep_for(std::chrono::seconds(1));
         if (!this->IsAlive()) {
             std::cout << "You lost the battle" << std::endl;
-            DropAllItems();
             return;
         }
     }
@@ -140,7 +145,7 @@ void Creature::CalculateStat()
 
     // Lookup table for stat modifications based on buffType
     const std::map<BuffType, Stats> buffTypeModifiers = {
-        {BuffType::AIR, {10, -5, -5}},
+        {BuffType::AIR, {20, -10, -10}},
         {BuffType::EARTH, {-10, -10, 20}},
         {BuffType::FIRE, {-10, 20, -10}},
         {BuffType::WATER, {-5, 10, -5}},
@@ -178,5 +183,11 @@ const int Creature::GetDamageCount(const Creature* targetEnemy) const
 bool Creature::IsAlive() const
 {
     return currentHealth>0;
+}
+
+bool Creature::Die()
+{
+    currentHealth = 0;
+    return false;
 }
 

@@ -19,7 +19,7 @@ public:
 	void CalculateStat();
 	const int GetDamageCount(const Creature* targetEnemy) const;
 	bool IsAlive() const;
-
+	bool Die();
 protected:
 	Item* buffItem;
 	Item* weapon;

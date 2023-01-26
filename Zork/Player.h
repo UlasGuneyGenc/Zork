@@ -19,6 +19,4 @@ public:
 	void Detail(const std::vector<std::string>& arguments);
 	void Use(const std::vector<std::string>& arguments);
 	void ShowInventory();
-	bool Die();
-
 };

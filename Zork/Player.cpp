@@ -52,7 +52,7 @@ void Player::Take(const std::vector<std::string>& arguments)
 		Entity* entity = static_cast<Item*>(GetParent()->Find(arguments[3], EntityType::ITEM));
 		if (entity == nullptr)
 		{
-			std::cout << "There is no such thing as '" << arguments[1] << "'" << std::endl;
+			std::cout << "There is no such thing as '" << arguments[1] << "' or '" << arguments[3] << "' " << std::endl;
 			return;
 		}
 		if (entity->GetType() == EntityType::ITEM)
@@ -269,6 +269,10 @@ void Player::Unlock(const std::vector<std::string>& arguments)
 			keyOnPlayer->ChangeParent((Entity*)wantedExit);
 			std::cout << DirectionToString(wantedExit->GetDirection()) << " exit is unlocked!" << std::endl;
 		}
+		else
+		{
+			std::cout << "This key does not work in here!" << std::endl;
+		}
 	}
 }
 
@@ -327,10 +331,3 @@ void Player::ShowInventory()
 		std::cout << "There is nothing in your inventory." << std::endl;
 	}
 }
-
-bool Player::Die()
-{
-	currentHealth = 0;
-	return false;
-}
-
