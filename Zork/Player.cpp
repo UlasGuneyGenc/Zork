@@ -171,24 +171,26 @@ void Player::Equip(const std::vector<std::string>& arguments)
 	}
 	Item* item = (Item*)entity;
 
-	//Now we will check if the item is buff
+	//Now we will check if the item is buff,weapon or armor
 	if (item)
 	{
 		if (item->GetItemType() == ItemType::WEAPON)
 		{
-			// do something with buff item
+			// assign weapon item
 			weapon = item;
 			CalculateStat();
 			std::cout << "You equipped '" << item->name << "' weapon." << std::endl;
 		}
 		else if (item->GetItemType() == ItemType::ARMOR)
 		{
+			// assign armor item
 			armor = item;
 			CalculateStat();
 			std::cout << "You equipped '" << item->name << "' armor." << std::endl;
 		}
 		else if (item->GetItemType() == ItemType::BUFF)
 		{
+			// assign buff item
 			buffItem = item;
 			CalculateStat();
 			std::cout << "You now have the '" << BuffTypeToString(buffItem->GetBuffType()) << "' buff." << std::endl;
@@ -301,8 +303,12 @@ void Player::Use(const std::vector<std::string>& arguments)
 		int random_number = rand() % 21 - 10; // generates a random number between -10 and 10
 		currentHealth = std::min(currentHealth + random_number + item->GetStats().getHealth(), stats->getHealth());
 		std::cout << "You replenished your health. HP: " << currentHealth<< "/"<< stats->getHealth() << std::endl;
-		delete item;
-		item = nullptr;
+		item->ChangeParent(GetRoom());
+		RemoveChild(item);
+	}
+	else
+	{
+		std::cout << "That is not a thing to use!"<< std::endl;
 	}
 }
 
