@@ -141,7 +141,7 @@ void Creature::CalculateStat()
     const int previous_damage = stats->getHealth() - currentHealth;
 
     // Initialize the stats with default values
-    stats->setAllNew(40, 40, 40);
+    stats->setAllNew(80, 40, 40);
 
     // Lookup table for stat modifications based on buffType
     const std::map<BuffType, Stats> buffTypeModifiers = {

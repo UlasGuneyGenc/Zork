@@ -40,7 +40,7 @@ World::World()
 
 	//Create enemies in rooms
 	Npc* zga = new Npc("Zga", "You see a giant creature who repeatedly whispers, 'Zga, Zga, Zga'. It seems to be an ancient language. Be careful!", abandonedChurch, BuffType::NONE, new Stats(40, 20, 30), false);
-	Npc* ates = new Npc("Ates", "A human-sized monster with twisted appearance, sharp claws, and glowing red eyes. It's known for its ferocity and intelligence.", theIronKeep, BuffType::NONE, new Stats(50, 30, 40), false);
+	Npc* ates = new Npc("Ates", "A human-sized monster with twisted appearance, sharp claws, and glowing red eyes. It's known for its ferocity and intelligence.", theIronKeep, BuffType::NONE, new Stats(45, 25, 30), false);
 	Npc* kenk = new Npc("Kenk", "An undead being with a decaying body and a relentless hunger for living flesh. Its movements are slow but its attacks are powerful and relentless.", graveyard, BuffType::NONE, new Stats(70, 40, 45), false);
 	Npc* drake = new Npc("Drake", " A dragon-like creature that has a large wings, sharp claws and teeth, and able to breathe fire. It's known for its ferocity, intelligence and wealth of treasure it guards fiercely.", dragonLair, BuffType::NONE, new Stats(120, 50, 50), true);
 
