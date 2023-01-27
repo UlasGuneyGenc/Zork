@@ -4,6 +4,7 @@
 #include "Room.h"
 #include "Creature.h"
 #include "Npc.h"
+#include "Helpers.h"
 
 Creature::Creature(const char* name, const char* description, Room* room, Stats* stats) : Entity(name, description, (Entity*)room)
 {
@@ -43,13 +44,13 @@ void Creature::Attack(const std::vector<std::string>& arguments)
     const std::list<Entity*>& roomChildren = GetRoom()->GetChildren();
     // Search for enemy in the room
     for (const auto& child : roomChildren) {
-        if (child->GetType() == EntityType::NPC)
+        if (child->GetType() == EntityType::NPC && toLowerCase(child->name) == arguments[1])
         {
             enemy = (Npc*)child;
         }
     }
     if (enemy == nullptr) {
-        std::cout << "There is nothing to attack!" << std::endl;
+        std::cout << "There is no emeny called '" << arguments[1] << "' in this room!" << std::endl;
         return;
     }
     combatTarget = enemy;
